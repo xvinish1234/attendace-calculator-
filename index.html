@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AttendanceIQ — Skip or Grind?</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card: #16161f;
+  --border: #23232f;
+  --border2: #2e2e3e;
+  --accent: #7c6af5;
+  --accent2: #a78bfa;
+  --green: #22d3a0;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --muted2: #9191a8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 70% 0%, rgba(124,106,245,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(34,211,160,0.06) 0%, transparent 50%);
+}
+
+/* ── Header ── */
+header {
+  padding: 2rem 2rem 0;
+  max-width: 1100px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.logo-text { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+.logo-text span { color: var(--accent2); }
+.req-control {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card); border: 1px solid var(--border2); border-radius: 12px; padding: 10px 16px;
+}
+.req-control label {
+  font-size: 0.78rem; color: var(--muted2); font-family: 'Space Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap;
+}
+input[type="range"] {
+  width: 110px; height: 4px; -webkit-appearance: none;
+  background: var(--border2); border-radius: 99px; cursor: pointer; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px;
+  background: var(--accent); border-radius: 50%; border: 2px solid var(--bg);
+}
+.req-val { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--accent2); min-width: 36px; }
+
+/* ── Hero ── */
+.hero { max-width: 1100px; margin: 2rem auto 0; padding: 0 2rem; }
+.hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.5rem; }
+.hero h1 .hi { color: var(--accent2); }
+.hero p { color: var(--muted2); font-size: 0.95rem; }
+
+/* ── How to use strip ── */
+.how-strip {
+  max-width: 1100px; margin: 1.8rem auto 0; padding: 0 2rem;
+}
+.how-inner {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 14px; padding: 1.2rem 1.6rem;
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+}
+.how-step {
+  display: flex; align-items: center; gap: 10px; flex: 1; min-width: 160px; padding: 0.4rem 0.8rem;
+}
+.how-step:not(:last-child) { border-right: 1px solid var(--border2); }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; font-family: 'Space Mono', monospace;
+}
+.step-text .st { font-size: 0.78rem; font-weight: 700; }
+.step-text .sd { font-size: 0.72rem; color: var(--muted2); margin-top: 1px; }
+
+/* ── Overall Stats ── */
+.overall-section {
+  max-width: 1100px; margin: 1.8rem auto 0; padding: 0 2rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 1rem;
+}
+.stat-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.2rem 1.4rem; position: relative; overflow: hidden;
+}
+.stat-tile::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 14px 14px 0 0;
+}
+.t-purple::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.t-green::before  { background: var(--green); }
+.t-yellow::before { background: var(--yellow); }
+.t-red::before    { background: var(--red); }
+.s-label { font-size: 0.72rem; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 8px; }
+.s-val   { font-size: 2rem; font-weight: 800; font-family: 'Space Mono', monospace; line-height: 1; }
+.s-sub   { font-size: 0.75rem; color: var(--muted2); margin-top: 4px; }
+
+/* ── Overall Bar ── */
+.overall-bar-wrap { max-width: 1100px; margin: 1rem auto 0; padding: 0 2rem; }
+.overall-bar-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.4rem 1.6rem;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.overall-pct { font-family: 'Space Mono', monospace; font-size: 2.8rem; font-weight: 700; line-height: 1; min-width: 110px; }
+.overall-bar-inner { flex: 1; min-width: 200px; }
+.bar-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-bottom: 6px; }
+.bar-track  { background: var(--border2); border-radius: 99px; height: 10px; overflow: visible; position: relative; }
+.bar-fill   { height: 100%; border-radius: 99px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
+.req-line   { position: absolute; top: -4px; bottom: -4px; width: 2px; background: rgba(255,255,255,0.45); border-radius: 2px; pointer-events: none; }
+.verdict-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 99px; font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
+.verdict-pill.safe   { background: rgba(34,211,160,0.12); color: var(--green);  border: 1px solid rgba(34,211,160,0.25); }
+.verdict-pill.warn   { background: rgba(251,191,36,0.12);  color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
+.verdict-pill.danger { background: rgba(248,113,113,0.12); color: var(--red);   border: 1px solid rgba(248,113,113,0.25); }
+.verdict-pill.idle   { background: rgba(255,255,255,0.04); color: var(--muted);  border: 1px solid var(--border2); }
+
+/* ── Table Section ── */
+.table-section { max-width: 1100px; margin: 1.5rem auto 0; padding: 0 2rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+.section-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+.section-title span { font-size: 0.75rem; font-weight: 500; color: var(--muted2); font-family: 'Space Mono', monospace; margin-left: 8px; }
+.btn-add {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(124,106,245,0.15); border: 1px solid rgba(124,106,245,0.35);
+  color: var(--accent2); border-radius: 8px; padding: 8px 16px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btn-add:hover { background: rgba(124,106,245,0.28); }
+.tbl-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 720px; }
+thead th {
+  padding: 12px 14px; text-align: left;
+  font-size: 0.68rem; font-family: 'Space Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted);
+  border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); white-space: nowrap;
+}
+thead th.c { text-align: center; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,0.015); }
+td { padding: 9px 14px; vertical-align: middle; }
+td input[type="text"],
+td input[type="number"] {
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+  border-radius: 7px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem; padding: 7px 10px; outline: none; width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+}
+td input[type="text"] { min-width: 130px; }
+td input[type="number"] { min-width: 70px; -moz-appearance: textfield; text-align: center; }
+td input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+td input:focus { border-color: var(--accent); background: rgba(124,106,245,0.07); }
+td select {
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2); color: var(--text);
+  border-radius: 7px; padding: 7px 8px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem; outline: none; cursor: pointer; width: 100%; transition: border-color 0.2s;
+}
+td select:focus { border-color: var(--accent); }
+td select option { background: #1e1e2a; }
+
+/* Empty state */
+#emptyState td {
+  text-align: center; padding: 2.5rem 1rem;
+  color: var(--muted); font-size: 0.88rem;
+}
+#emptyState .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+#emptyState .empty-tip  { font-size: 0.78rem; color: var(--muted); margin-top: 6px; font-family: 'Space Mono', monospace; }
+
+.pct-cell { text-align: center; }
+.pct-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 66px; padding: 4px 10px; border-radius: 8px;
+  font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: 700;
+}
+.pct-badge.green  { background: rgba(34,211,160,0.12);  color: var(--green); }
+.pct-badge.yellow { background: rgba(251,191,36,0.12);   color: var(--yellow); }
+.pct-badge.red    { background: rgba(248,113,113,0.12);  color: var(--red); }
+.pct-badge.na     { background: rgba(255,255,255,0.05);  color: var(--muted); }
+.mini-bar-wrap { background: var(--border2); border-radius: 99px; height: 4px; width: 74px; overflow: hidden; margin: 4px auto 0; }
+.mini-bar { height: 100%; border-radius: 99px; transition: width 0.5s; }
+.verdict-cell { font-size: 0.8rem; white-space: nowrap; }
+.can-skip    { color: var(--green);  font-weight: 600; }
+.must-attend { color: var(--red);    font-weight: 600; }
+.on-edge     { color: var(--yellow); font-weight: 600; }
+.nd          { color: var(--muted); }
+.btn-del {
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  font-size: 1rem; padding: 4px 6px; border-radius: 6px; transition: color 0.2s, background 0.2s;
+}
+.btn-del:hover { color: var(--red); background: rgba(248,113,113,0.1); }
+
+/* ── Action Bar ── */
+.action-bar { max-width: 1100px; margin: 1.2rem auto 0; padding: 0 2rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.btn-calc {
+  flex: 1; min-width: 160px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none; border-radius: 12px; padding: 14px 24px;
+  font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s; letter-spacing: -0.01em;
+}
+.btn-calc:hover { opacity: 0.9; }
+.btn-calc:active { transform: scale(0.98); }
+.btn-reset {
+  background: var(--card); border: 1px solid var(--border2); color: var(--muted2);
+  border-radius: 12px; padding: 14px 20px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s;
+}
+.btn-reset:hover { background: var(--border2); color: var(--text); }
+
+/* ── Summary ── */
+.summary-section { display: none; max-width: 1100px; margin: 1.5rem auto 0; padding: 0 2rem; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
+.sub-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; display: flex; flex-direction: column; gap: 10px; }
+.sub-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.sub-name { font-weight: 700; font-size: 0.95rem; line-height: 1.3; }
+.sub-type { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
+.sub-pct-big { font-family: 'Space Mono', monospace; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+.sub-bar-track { background: var(--border2); border-radius: 99px; height: 6px; overflow: hidden; }
+.sub-bar-fill  { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.sub-stats { display: flex; gap: 1rem; flex-wrap: wrap; }
+.sub-stat .sl { font-size: 0.67rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.07em; }
+.sub-stat .sv { font-size: 0.9rem; font-weight: 700; font-family: 'Space Mono', monospace; }
+.sub-verdict { font-size: 0.8rem; font-weight: 600; padding: 8px 10px; border-radius: 8px; line-height: 1.5; }
+.sub-verdict.safe   { background: rgba(34,211,160,0.1);  color: var(--green); }
+.sub-verdict.warn   { background: rgba(251,191,36,0.1);  color: var(--yellow); }
+.sub-verdict.danger { background: rgba(248,113,113,0.1); color: var(--red); }
+
+/* ── Ko-fi ── */
+.kofi-section {
+  max-width: 1100px; margin: 2.5rem auto 0; padding: 0 2rem 3rem;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.kofi-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: #7B4F2E; color: #fff; text-decoration: none;
+  padding: 13px 26px; border-radius: 99px;
+  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.95rem;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 4px 20px rgba(123,79,46,0.4);
+  letter-spacing: -0.01em;
+}
+.kofi-btn:hover { background: #6a4227; transform: translateY(-2px); }
+.kofi-btn:active { transform: scale(0.97); }
+.kofi-note { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; }
+
+footer { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; text-align: center; font-size: 0.7rem; color: #2e2e3e; font-family: 'Space Mono', monospace; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  header, .hero, .how-strip, .overall-section, .overall-bar-wrap, .table-section, .action-bar, .summary-section, .kofi-section { padding-left: 1rem; padding-right: 1rem; }
+  .overall-section { grid-template-columns: 1fr 1fr; }
+  .how-step:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border2); }
+  .how-inner { flex-direction: column; }
+  input[type="range"] { width: 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">📊</div>
+    <div class="logo-text">Attendance<span>IQ</span></div>
+  </div>
+  <div class="req-control">
+    <label>Required %</label>
+    <input type="range" id="reqSlider" min="50" max="100" value="75"
+      oninput="document.getElementById('reqDisplay').textContent=this.value+'%'; liveCalc()"/>
+    <span class="req-val" id="reqDisplay">75%</span>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Skip or grind?<br/><span class="hi">Your attendance, calculated.</span></h1>
+  <p>Works for any college · any semester · any number of subjects.</p>
+</div>
+
+<!-- How to use — 3 steps, no friction -->
+<div class="how-strip">
+  <div class="how-inner">
+    <div class="how-step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <div class="st">Set your required %</div>
+        <div class="sd">Use the slider top-right (default 75%)</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <div class="st">Add your subjects</div>
+        <div class="sd">Name · type · lectures held · attended</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <div class="st">Hit Calculate</div>
+        <div class="sd">See exactly what you can skip or must attend</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overall Stats -->
+<div class="overall-section">
+  <div class="stat-tile t-purple">
+    <div class="s-label">Overall %</div>
+    <div class="s-val" id="overallPct" style="color:var(--accent2)">—</div>
+    <div class="s-sub">across all subjects</div>
+  </div>
+  <div class="stat-tile t-green">
+    <div class="s-label">Total Attended</div>
+    <div class="s-val" id="totalAtt" style="color:var(--green)">—</div>
+    <div class="s-sub">lectures attended</div>
+  </div>
+  <div class="stat-tile t-yellow">
+    <div class="s-label">Total Held</div>
+    <div class="s-val" id="totalHeld" style="color:var(--yellow)">—</div>
+    <div class="s-sub">lectures conducted</div>
+  </div>
+  <div class="stat-tile t-red">
+    <div class="s-label">Subjects at Risk</div>
+    <div class="s-val" id="atRisk" style="color:var(--red)">—</div>
+    <div class="s-sub">below required %</div>
+  </div>
+</div>
+
+<!-- Overall Bar -->
+<div class="overall-bar-wrap">
+  <div class="overall-bar-card">
+    <div>
+      <div class="overall-pct" id="overallPctBig" style="color:var(--accent2)">—</div>
+      <div style="font-size:0.72rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px">Overall</div>
+    </div>
+    <div class="overall-bar-inner">
+      <div class="bar-labels">
+        <span>0%</span>
+        <span id="reqLineLabel">Required: 75%</span>
+        <span>100%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="overallBarFill" style="width:0%"></div>
+        <div class="req-line" id="reqLineEl" style="left:75%"></div>
+      </div>
+    </div>
+    <div id="overallVerdict" class="verdict-pill idle">Add subjects below ↓</div>
+  </div>
+</div>
+
+<!-- Subject Table -->
+<div class="table-section">
+  <div class="section-header">
+    <div class="section-title">Your Subjects <span id="subCount">0 subjects</span></div>
+    <button class="btn-add" onclick="addRow()">＋ Add Subject</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th>Subject Name</th>
+          <th class="c">Type</th>
+          <th class="c">Freq / Week</th>
+          <th class="c">Total Held</th>
+          <th class="c">Attended</th>
+          <th class="c">Attendance %</th>
+          <th class="c">Can Skip / Must Attend</th>
+          <th style="width:30px"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr id="emptyState">
+          <td colspan="9">
+            <div class="empty-icon">📋</div>
+            <div>No subjects added yet.</div>
+            <div class="empty-tip">Click "＋ Add Subject" to get started</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div class="action-bar">
+  <button class="btn-calc" onclick="calculate()">⚡ Calculate &amp; Show Full Breakdown</button>
+  <button class="btn-reset" onclick="resetAll()">↺ Clear All</button>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-section" id="summarySection">
+  <div class="section-header">
+    <div class="section-title">Subject-wise Breakdown</div>
+  </div>
+  <div class="summary-grid" id="summaryGrid"></div>
+</div>
+
+<!-- Ko-fi -->
+<div class="kofi-section">
+  <a class="kofi-btn" href="https://ko-fi.com/velvetpulse99" target="_blank" rel="noopener">
+    🍫 Buy me a chocolate
+  </a>
+  <span class="kofi-note">Just ₹50 or so · helps keep AttendanceIQ free for everyone 🙏</span>
+</div>
+
+<footer>AttendanceIQ · Free for every college student · Works for any number of subjects</footer>
+
+<script>
+let rowId = 0;
+
+function addRow(data = {}) {
+  // Remove empty state row if present
+  const es = document.getElementById('emptyState');
+  if (es) es.remove();
+
+  rowId++;
+  const id = rowId;
+  const tbody = document.getElementById('tableBody');
+  const tr = document.createElement('tr');
+  tr.id = 'row-' + id;
+
+  const typeOpts = ['Theory','Lab','Tutorial','Practical']
+    .map(t => `<option value="${t}" ${(data.type||'Theory')===t?'selected':''}>${t}</option>`)
+    .join('');
+
+  tr.innerHTML = `
+    <td style="font-family:'Space Mono',monospace;color:var(--muted);font-size:0.78rem;text-align:center">${rowId}</td>
+    <td><input type="text" placeholder="e.g. Mathematics" value="${data.name||''}" oninput="liveCalc()"/></td>
+    <td><select onchange="liveCalc()">${typeOpts}</select></td>
+    <td><input type="number" placeholder="3"  value="${data.freq||''}"     min="1" oninput="liveCalc()"/></td>
+    <td><input type="number" placeholder="0"  value="${data.held||''}"     min="0" oninput="liveCalc()"/></td>
+    <td><input type="number" placeholder="0"  value="${data.attended||''}" min="0" oninput="liveCalc()"/></td>
+    <td class="pct-cell" id="pct-${id}">
+      <span class="pct-badge na">—</span>
+      <div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div>
+    </td>
+    <td class="verdict-cell" id="vrd-${id}"><span class="nd">—</span></td>
+    <td><button class="btn-del" onclick="deleteRow(${id})" title="Remove row">✕</button></td>
+  `;
+  tbody.appendChild(tr);
+  updateSubCount();
+  liveCalc();
+
+  // Focus the subject name input for fast typing
+  tr.querySelector('input[type="text"]').focus();
+}
+
+function deleteRow(id) {
+  const row = document.getElementById('row-' + id);
+  if (row) row.remove();
+  const tbody = document.getElementById('tableBody');
+  if (!tbody.querySelector('tr:not(#emptyState)')) {
+    const es = document.createElement('tr');
+    es.id = 'emptyState';
+    es.innerHTML = `<td colspan="9"><div class="empty-icon">📋</div><div>No subjects added yet.</div><div class="empty-tip">Click "＋ Add Subject" to get started</div></td>`;
+    tbody.appendChild(es);
+  }
+  updateSubCount();
+  liveCalc();
+}
+
+function updateSubCount() {
+  const n = document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').length;
+  document.getElementById('subCount').textContent = n + ' subject' + (n !== 1 ? 's' : '');
+}
+
+function getRows() {
+  const rows = [];
+  document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').forEach(tr => {
+    const inputs = tr.querySelectorAll('input');
+    const sel    = tr.querySelector('select');
+    rows.push({
+      id:       tr.id.replace('row-', ''),
+      name:     inputs[0]?.value.trim() || '',
+      type:     sel?.value || 'Theory',
+      freq:     parseInt(inputs[1]?.value) || 0,
+      held:     parseInt(inputs[2]?.value) || 0,
+      attended: parseInt(inputs[3]?.value) || 0,
+    });
+  });
+  return rows;
+}
+
+function getReq() { return parseInt(document.getElementById('reqSlider').value); }
+
+function pctColor(pct, req) {
+  if (pct >= req)     return { cls: 'green',  color: 'var(--green)' };
+  if (pct >= req - 5) return { cls: 'yellow', color: 'var(--yellow)' };
+  return                     { cls: 'red',    color: 'var(--red)' };
+}
+
+function calcSkip(att, held, req) {
+  return Math.floor(att * 100 / req - held);
+}
+
+function calcMustAttend(att, held, req) {
+  if (req >= 100) return Math.max(0, held - att);
+  return Math.max(0, Math.ceil((req * held - 100 * att) / (100 - req)));
+}
+
+function liveCalc() {
+  const req = getReq();
+  const rows = getRows();
+  let totalHeld = 0, totalAtt = 0, atRisk = 0;
+
+  rows.forEach(r => {
+    const pctCell = document.getElementById('pct-' + r.id);
+    const vrdCell = document.getElementById('vrd-' + r.id);
+    if (!pctCell) return;
+
+    if (r.held <= 0) {
+      pctCell.innerHTML = `<span class="pct-badge na">—</span><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div>`;
+      vrdCell.innerHTML = `<span class="nd">Enter data</span>`;
+      return;
+    }
+
+    const att = Math.min(r.attended, r.held);
+    const pct = (att / r.held) * 100;
+    const { cls, color } = pctColor(pct, req);
+
+    pctCell.innerHTML = `
+      <span class="pct-badge ${cls}">${pct.toFixed(1)}%</span>
+      <div class="mini-bar-wrap"><div class="mini-bar" style="width:${Math.min(pct,100)}%;background:${color}"></div></div>`;
+
+    if (pct >= req) {
+      const skip = calcSkip(att, r.held, req);
+      vrdCell.innerHTML = skip > 0
+        ? `<span class="can-skip">✓ Skip ${skip} class${skip===1?'':'es'}</span>`
+        : `<span class="on-edge">⚠ Don't skip more</span>`;
+    } else {
+      const must = calcMustAttend(att, r.held, req);
+      vrdCell.innerHTML = `<span class="must-attend">⚑ Attend ${must} more</span>`;
+      atRisk++;
+    }
+
+    totalHeld += r.held;
+    totalAtt  += att;
+  });
+
+  // Update overall tiles & bar
+  if (totalHeld > 0) {
+    const ovPct = (totalAtt / totalHeld) * 100;
+    const { cls, color } = pctColor(ovPct, req);
+
+    document.getElementById('overallPct').textContent    = ovPct.toFixed(1) + '%';
+    document.getElementById('overallPct').style.color    = color;
+    document.getElementById('overallPctBig').textContent = ovPct.toFixed(1) + '%';
+    document.getElementById('overallPctBig').style.color = color;
+    document.getElementById('totalAtt').textContent      = totalAtt;
+    document.getElementById('totalHeld').textContent     = totalHeld;
+    document.getElementById('atRisk').textContent        = atRisk;
+
+    const fill = document.getElementById('overallBarFill');
+    fill.style.width      = Math.min(ovPct, 100) + '%';
+    fill.style.background = color;
+    document.getElementById('reqLineEl').style.left      = req + '%';
+    document.getElementById('reqLineLabel').textContent  = 'Required: ' + req + '%';
+
+    const vEl = document.getElementById('overallVerdict');
+    if (ovPct >= req) {
+      const skip = calcSkip(totalAtt, totalHeld, req);
+      vEl.className   = 'verdict-pill safe';
+      vEl.textContent = skip > 0 ? `✓ Can skip ${skip} overall` : '✓ Just at limit';
+    } else {
+      const must = calcMustAttend(totalAtt, totalHeld, req);
+      vEl.className   = 'verdict-pill danger';
+      vEl.textContent = `⚠ Need ${must} more classes`;
+    }
+  } else {
+    ['overallPct','overallPctBig','totalAtt','totalHeld','atRisk'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '—';
+    });
+    document.getElementById('overallBarFill').style.width = '0%';
+    const vEl = document.getElementById('overallVerdict');
+    vEl.className = 'verdict-pill idle';
+    vEl.textContent = 'Add subjects below ↓';
+  }
+}
+
+function calculate() {
+  liveCalc();
+  const req  = getReq();
+  const rows = getRows().filter(r => r.held > 0);
+  if (!rows.length) { alert('Please add at least one subject with total and attended lectures filled in.'); return; }
+
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = '';
+
+  rows.forEach(r => {
+    const att = Math.min(r.attended, r.held);
+    const pct = (att / r.held) * 100;
+    const { cls, color } = pctColor(pct, req);
+    const minNeeded  = Math.ceil(req / 100 * r.held);
+    const shortfall  = Math.max(0, minNeeded - att);
+
+    let verdictText, verdictCls;
+    if (pct >= req) {
+      const skip = calcSkip(att, r.held, req);
+      if (skip > 0) {
+        verdictText = `🟢 You can bunk up to ${skip} more ${r.type.toLowerCase()} class${skip===1?'':'es'} and stay above ${req}%.`;
+        verdictCls  = 'safe';
+      } else {
+        verdictText = `🟡 You're right at the edge — one more skip puts you below ${req}%.`;
+        verdictCls  = 'warn';
+      }
+    } else {
+      const must = calcMustAttend(att, r.held, req);
+      verdictText = `🔴 Attend the next ${must} class${must===1?'':'es'} in a row (no skipping) to reach ${req}%.`;
+      verdictCls  = 'danger';
+    }
+
+    const card = document.createElement('div');
+    card.className = 'sub-card';
+    card.innerHTML = `
+      <div class="sub-card-header">
+        <div>
+          <div class="sub-name">${r.name || 'Unnamed Subject'}</div>
+          <div class="sub-type">${r.type}${r.freq ? ' · ' + r.freq + '/week' : ''}</div>
+        </div>
+        <div class="sub-pct-big" style="color:${color}">${pct.toFixed(1)}%</div>
+      </div>
+      <div class="sub-bar-track">
+        <div class="sub-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div>
+      </div>
+      <div class="sub-stats">
+        <div class="sub-stat"><div class="sl">Attended</div><div class="sv">${att}</div></div>
+        <div class="sub-stat"><div class="sl">Total</div><div class="sv">${r.held}</div></div>
+        <div class="sub-stat"><div class="sl">Min needed</div><div class="sv">${minNeeded}</div></div>
+        <div class="sub-stat"><div class="sl">Shortfall</div><div class="sv" style="color:${shortfall>0?'var(--red)':'var(--green)'}">${shortfall > 0 ? shortfall : '✓ 0'}</div></div>
+      </div>
+      <div class="sub-verdict ${verdictCls}">${verdictText}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const ss = document.getElementById('summarySection');
+  ss.style.display = 'block';
+  ss.style.animation = 'none';
+  void ss.offsetWidth;
+  ss.style.animation = 'fadeUp 0.4s ease both';
+  setTimeout(() => ss.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function resetAll() {
+  if (!confirm('Clear all subjects and start fresh?')) return;
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  const es = document.createElement('tr');
+  es.id = 'emptyState';
+  es.innerHTML = `<td colspan="9"><div class="empty-icon">📋</div><div>No subjects added yet.</div><div class="empty-tip">Click "＋ Add Subject" to get started</div></td>`;
+  tbody.appendChild(es);
+  document.getElementById('summarySection').style.display = 'none';
+  rowId = 0;
+  updateSubCount();
+  liveCalc();
+}
+
+// Allow Enter to add a new row when in last input
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+    const allRows = [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')];
+    const lastRow = allRows[allRows.length - 1];
+    if (lastRow) {
+      const inputs = [...lastRow.querySelectorAll('input')];
+      if (inputs.includes(e.target) && inputs.indexOf(e.target) === inputs.length - 1) {
+        addRow();
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
