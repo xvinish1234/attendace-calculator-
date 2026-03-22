@@ -7,358 +7,277 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #0a0a0f;
-  --card: #16161f;
-  --border: #23232f;
-  --border2: #2e2e3e;
-  --accent: #7c6af5;
-  --accent2: #a78bfa;
-  --green: #22d3a0;
-  --yellow: #fbbf24;
-  --red: #f87171;
-  --text: #e8e8f0;
-  --muted: #6b6b80;
-  --muted2: #9191a8;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse 60% 40% at 70% 0%, rgba(124,106,245,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(34,211,160,0.06) 0%, transparent 50%);
-}
+:root{--bg:#0a0a0f;--card:#16161f;--border:#23232f;--border2:#2e2e3e;--accent:#7c6af5;--accent2:#a78bfa;--green:#22d3a0;--yellow:#fbbf24;--red:#f87171;--text:#e8e8f0;--muted:#6b6b80;--muted2:#9191a8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:100px;
+  background-image:radial-gradient(ellipse 60% 40% at 70% 0%,rgba(124,106,245,.12) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 20% 80%,rgba(34,211,160,.06) 0%,transparent 50%);}
 
-/* ── Header ── */
-header {
-  padding: 2rem 2rem 0;
-  max-width: 1100px; margin: 0 auto;
-  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-}
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-icon {
-  width: 38px; height: 38px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-}
-.logo-text { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
-.logo-text span { color: var(--accent2); }
-.req-control {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--card); border: 1px solid var(--border2); border-radius: 12px; padding: 10px 16px;
-}
-.req-control label {
-  font-size: 0.78rem; color: var(--muted2); font-family: 'Space Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap;
-}
-input[type="range"] {
-  width: 110px; height: 4px; -webkit-appearance: none;
-  background: var(--border2); border-radius: 99px; cursor: pointer; outline: none;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 16px; height: 16px;
-  background: var(--accent); border-radius: 50%; border: 2px solid var(--bg);
-}
-.req-val { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--accent2); min-width: 36px; }
+/* Banner */
+#storageBanner{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:#1a1a26;border-top:1px solid var(--border2);padding:1rem 1.5rem;display:none;align-items:flex-start;gap:1rem;flex-wrap:wrap;box-shadow:0 -8px 32px rgba(0,0,0,.5);animation:slideUp .35s ease both;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sb-text{flex:1;min-width:200px;}.sb-title{font-size:.88rem;font-weight:700;margin-bottom:3px;}.sb-desc{font-size:.75rem;color:var(--muted2);line-height:1.5;}.sb-desc strong{color:var(--green);}
+.sb-btns{display:flex;gap:.6rem;align-items:center;}
+.sb-accept{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;}
+.sb-reject{background:transparent;color:var(--muted2);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;}
 
-/* ── Hero ── */
-.hero { max-width: 1100px; margin: 2rem auto 0; padding: 0 2rem; }
-.hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.5rem; }
-.hero h1 .hi { color: var(--accent2); }
-.hero p { color: var(--muted2); font-size: 0.95rem; }
+/* Header */
+header{padding:2rem 2rem 0;max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.logo-text{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;}.logo-text span{color:var(--accent2);}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.req-control{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;}
+.req-control label{font-size:.75rem;color:var(--muted2);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
+input[type=range]{width:100px;height:4px;-webkit-appearance:none;background:var(--border2);border-radius:99px;cursor:pointer;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;background:var(--accent);border-radius:50%;border:2px solid var(--bg);}
+.req-val{font-family:'Space Mono',monospace;font-size:.88rem;font-weight:700;color:var(--accent2);min-width:34px;}
+.storage-pill{display:flex;align-items:center;gap:5px;font-size:.7rem;font-family:'Space Mono',monospace;color:var(--muted);cursor:pointer;}
+.storage-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);}
+.storage-pill .dot.on{background:var(--green);}
+.storage-pill:hover{color:var(--text);}
 
-/* ── How to use strip ── */
-.how-strip {
-  max-width: 1100px; margin: 1.8rem auto 0; padding: 0 2rem;
-}
-.how-inner {
-  background: var(--card); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 1.2rem 1.6rem;
-  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
-}
-.how-step {
-  display: flex; align-items: center; gap: 10px; flex: 1; min-width: 160px; padding: 0.4rem 0.8rem;
-}
-.how-step:not(:last-child) { border-right: 1px solid var(--border2); }
-.step-num {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 700; font-family: 'Space Mono', monospace;
-}
-.step-text .st { font-size: 0.78rem; font-weight: 700; }
-.step-text .sd { font-size: 0.72rem; color: var(--muted2); margin-top: 1px; }
+/* Hero */
+.hero{max-width:1100px;margin:2rem auto 0;padding:0 2rem;}
+.hero h1{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:.4rem;}
+.hero h1 .hi{color:var(--accent2);}
+.hero p{color:var(--muted2);font-size:.92rem;}
 
-/* ── Overall Stats ── */
-.overall-section {
-  max-width: 1100px; margin: 1.8rem auto 0; padding: 0 2rem;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 1rem;
-}
-.stat-tile {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 1.2rem 1.4rem; position: relative; overflow: hidden;
-}
-.stat-tile::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 14px 14px 0 0;
-}
-.t-purple::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-.t-green::before  { background: var(--green); }
-.t-yellow::before { background: var(--yellow); }
-.t-red::before    { background: var(--red); }
-.s-label { font-size: 0.72rem; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 8px; }
-.s-val   { font-size: 2rem; font-weight: 800; font-family: 'Space Mono', monospace; line-height: 1; }
-.s-sub   { font-size: 0.75rem; color: var(--muted2); margin-top: 4px; }
+/* How-to */
+.how-strip{max-width:1100px;margin:1.5rem auto 0;padding:0 2rem;}
+.how-inner{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1rem 1.4rem;display:flex;align-items:stretch;flex-wrap:wrap;}
+.how-step{display:flex;align-items:center;gap:9px;flex:1;min-width:140px;padding:.35rem .7rem;}
+.how-step:not(:last-child){border-right:1px solid var(--border2);}
+.step-num{width:26px;height:26px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'Space Mono',monospace;}
+.step-text .st{font-size:.76rem;font-weight:700;}.step-text .sd{font-size:.7rem;color:var(--muted2);margin-top:1px;}
 
-/* ── Overall Bar ── */
-.overall-bar-wrap { max-width: 1100px; margin: 1rem auto 0; padding: 0 2rem; }
-.overall-bar-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 1.4rem 1.6rem;
-  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
-}
-.overall-pct { font-family: 'Space Mono', monospace; font-size: 2.8rem; font-weight: 700; line-height: 1; min-width: 110px; }
-.overall-bar-inner { flex: 1; min-width: 200px; }
-.bar-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-bottom: 6px; }
-.bar-track  { background: var(--border2); border-radius: 99px; height: 10px; overflow: visible; position: relative; }
-.bar-fill   { height: 100%; border-radius: 99px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
-.req-line   { position: absolute; top: -4px; bottom: -4px; width: 2px; background: rgba(255,255,255,0.45); border-radius: 2px; pointer-events: none; }
-.verdict-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 99px; font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
-.verdict-pill.safe   { background: rgba(34,211,160,0.12); color: var(--green);  border: 1px solid rgba(34,211,160,0.25); }
-.verdict-pill.warn   { background: rgba(251,191,36,0.12);  color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
-.verdict-pill.danger { background: rgba(248,113,113,0.12); color: var(--red);   border: 1px solid rgba(248,113,113,0.25); }
-.verdict-pill.idle   { background: rgba(255,255,255,0.04); color: var(--muted);  border: 1px solid var(--border2); }
+/* Stats */
+.overall-section{max-width:1100px;margin:1.5rem auto 0;padding:0 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;position:relative;overflow:hidden;}
+.stat-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0;}
+.t-purple::before{background:linear-gradient(90deg,var(--accent),var(--accent2));}.t-green::before{background:var(--green);}.t-yellow::before{background:var(--yellow);}.t-red::before{background:var(--red);}
+.s-label{font-size:.7rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:6px;}
+.s-val{font-size:1.9rem;font-weight:800;font-family:'Space Mono',monospace;line-height:1;}
+.s-sub{font-size:.73rem;color:var(--muted2);margin-top:3px;}
 
-/* ── Table Section ── */
-.table-section { max-width: 1100px; margin: 1.5rem auto 0; padding: 0 2rem; }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
-.section-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
-.section-title span { font-size: 0.75rem; font-weight: 500; color: var(--muted2); font-family: 'Space Mono', monospace; margin-left: 8px; }
-.btn-add {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(124,106,245,0.15); border: 1px solid rgba(124,106,245,0.35);
-  color: var(--accent2); border-radius: 8px; padding: 8px 16px;
-  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
-}
-.btn-add:hover { background: rgba(124,106,245,0.28); }
-.tbl-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 720px; }
-thead th {
-  padding: 12px 14px; text-align: left;
-  font-size: 0.68rem; font-family: 'Space Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted);
-  border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); white-space: nowrap;
-}
-thead th.c { text-align: center; }
-tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: rgba(255,255,255,0.015); }
-td { padding: 9px 14px; vertical-align: middle; }
-td input[type="text"],
-td input[type="number"] {
-  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
-  border-radius: 7px; color: var(--text); font-family: 'DM Sans', sans-serif;
-  font-size: 0.88rem; padding: 7px 10px; outline: none; width: 100%;
-  transition: border-color 0.2s, background 0.2s;
-}
-td input[type="text"] { min-width: 130px; }
-td input[type="number"] { min-width: 70px; -moz-appearance: textfield; text-align: center; }
-td input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
-td input:focus { border-color: var(--accent); background: rgba(124,106,245,0.07); }
-td select {
-  background: rgba(255,255,255,0.04); border: 1px solid var(--border2); color: var(--text);
-  border-radius: 7px; padding: 7px 8px; font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem; outline: none; cursor: pointer; width: 100%; transition: border-color 0.2s;
-}
-td select:focus { border-color: var(--accent); }
-td select option { background: #1e1e2a; }
+/* Overall bar */
+.overall-bar-wrap{max-width:1100px;margin:.8rem auto 0;padding:0 2rem;}
+.overall-bar-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;}
+.overall-pct{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;line-height:1;min-width:100px;}
+.overall-bar-inner{flex:1;min-width:180px;}
+.bar-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:5px;}
+.bar-track{background:var(--border2);border-radius:99px;height:10px;overflow:visible;position:relative;}
+.bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.req-line{position:absolute;top:-4px;bottom:-4px;width:2px;background:rgba(255,255,255,.45);border-radius:2px;pointer-events:none;}
+.verdict-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:99px;font-size:.8rem;font-weight:600;white-space:nowrap;}
+.verdict-pill.safe{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25);}
+.verdict-pill.warn{background:rgba(251,191,36,.12);color:var(--yellow);border:1px solid rgba(251,191,36,.25);}
+.verdict-pill.danger{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25);}
+.verdict-pill.idle{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border2);}
 
-/* Empty state */
-#emptyState td {
-  text-align: center; padding: 2.5rem 1rem;
-  color: var(--muted); font-size: 0.88rem;
-}
-#emptyState .empty-icon { font-size: 2rem; margin-bottom: 8px; }
-#emptyState .empty-tip  { font-size: 0.78rem; color: var(--muted); margin-top: 6px; font-family: 'Space Mono', monospace; }
+/* Table */
+.table-section{max-width:1100px;margin:1.3rem auto 0;padding:0 2rem;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem;}
+.section-title{font-size:.95rem;font-weight:700;}
+.section-title span{font-size:.73rem;font-weight:500;color:var(--muted2);font-family:'Space Mono',monospace;margin-left:7px;}
+.btn-add{display:flex;align-items:center;gap:5px;background:rgba(124,106,245,.15);border:1px solid rgba(124,106,245,.35);color:var(--accent2);border-radius:8px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.btn-add:hover{background:rgba(124,106,245,.28);}
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+thead th{padding:11px 13px;text-align:left;font-size:.65rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap;}
+thead th.c{text-align:center;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.015);}
+td{padding:8px 13px;vertical-align:middle;}
+td input[type=text],td input[type=number]{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.86rem;padding:6px 9px;outline:none;width:100%;transition:border-color .2s;}
+td input[type=text]{min-width:120px;}
+td input[type=number]{min-width:62px;-moz-appearance:textfield;text-align:center;}
+td input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+td input:focus{border-color:var(--accent);background:rgba(124,106,245,.07);}
+td select{background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--text);border-radius:7px;padding:6px 7px;font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;cursor:pointer;width:100%;}
+td select option{background:#1e1e2a;}
 
-.pct-cell { text-align: center; }
-.pct-badge {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 66px; padding: 4px 10px; border-radius: 8px;
-  font-family: 'Space Mono', monospace; font-size: 0.8rem; font-weight: 700;
-}
-.pct-badge.green  { background: rgba(34,211,160,0.12);  color: var(--green); }
-.pct-badge.yellow { background: rgba(251,191,36,0.12);   color: var(--yellow); }
-.pct-badge.red    { background: rgba(248,113,113,0.12);  color: var(--red); }
-.pct-badge.na     { background: rgba(255,255,255,0.05);  color: var(--muted); }
-.mini-bar-wrap { background: var(--border2); border-radius: 99px; height: 4px; width: 74px; overflow: hidden; margin: 4px auto 0; }
-.mini-bar { height: 100%; border-radius: 99px; transition: width 0.5s; }
-.verdict-cell { font-size: 0.8rem; white-space: nowrap; }
-.can-skip    { color: var(--green);  font-weight: 600; }
-.must-attend { color: var(--red);    font-weight: 600; }
-.on-edge     { color: var(--yellow); font-weight: 600; }
-.nd          { color: var(--muted); }
-.btn-del {
-  background: none; border: none; color: var(--muted); cursor: pointer;
-  font-size: 1rem; padding: 4px 6px; border-radius: 6px; transition: color 0.2s, background 0.2s;
-}
-.btn-del:hover { color: var(--red); background: rgba(248,113,113,0.1); }
+/* freq/week column - optional, dimmed */
+.freq-cell input{opacity:.6;}
+.freq-cell input:focus{opacity:1;}
+.freq-hint{font-size:.6rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;text-align:center;}
 
-/* ── Action Bar ── */
-.action-bar { max-width: 1100px; margin: 1.2rem auto 0; padding: 0 2rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-.btn-calc {
-  flex: 1; min-width: 160px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff; border: none; border-radius: 12px; padding: 14px 24px;
-  font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s; letter-spacing: -0.01em;
-}
-.btn-calc:hover { opacity: 0.9; }
-.btn-calc:active { transform: scale(0.98); }
-.btn-reset {
-  background: var(--card); border: 1px solid var(--border2); color: var(--muted2);
-  border-radius: 12px; padding: 14px 20px; font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s;
-}
-.btn-reset:hover { background: var(--border2); color: var(--text); }
+#emptyState td{text-align:center;padding:2.2rem 1rem;color:var(--muted);font-size:.85rem;}
+#emptyState .empty-icon{font-size:1.8rem;margin-bottom:7px;}
+#emptyState .empty-tip{font-size:.75rem;color:var(--muted);margin-top:5px;font-family:'Space Mono',monospace;}
+.pct-cell{text-align:center;}
+.pct-badge{display:inline-flex;align-items:center;justify-content:center;min-width:62px;padding:4px 9px;border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;}
+.pct-badge.green{background:rgba(34,211,160,.12);color:var(--green);}
+.pct-badge.yellow{background:rgba(251,191,36,.12);color:var(--yellow);}
+.pct-badge.red{background:rgba(248,113,113,.12);color:var(--red);}
+.pct-badge.na{background:rgba(255,255,255,.05);color:var(--muted);}
+.mini-bar-wrap{background:var(--border2);border-radius:99px;height:4px;width:68px;overflow:hidden;margin:3px auto 0;}
+.mini-bar{height:100%;border-radius:99px;transition:width .5s;}
+.verdict-cell{font-size:.78rem;white-space:nowrap;}
+.can-skip{color:var(--green);font-weight:600;}.must-attend{color:var(--red);font-weight:600;}.on-edge{color:var(--yellow);font-weight:600;}.nd{color:var(--muted);}
+.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:4px 6px;border-radius:6px;transition:color .2s;}
+.btn-del:hover{color:var(--red);}
 
-/* ── Summary ── */
-.summary-section { display: none; max-width: 1100px; margin: 1.5rem auto 0; padding: 0 2rem; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
-.sub-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; display: flex; flex-direction: column; gap: 10px; }
-.sub-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.sub-name { font-weight: 700; font-size: 0.95rem; line-height: 1.3; }
-.sub-type { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
-.sub-pct-big { font-family: 'Space Mono', monospace; font-size: 1.8rem; font-weight: 700; line-height: 1; }
-.sub-bar-track { background: var(--border2); border-radius: 99px; height: 6px; overflow: hidden; }
-.sub-bar-fill  { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
-.sub-stats { display: flex; gap: 1rem; flex-wrap: wrap; }
-.sub-stat .sl { font-size: 0.67rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.07em; }
-.sub-stat .sv { font-size: 0.9rem; font-weight: 700; font-family: 'Space Mono', monospace; }
-.sub-verdict { font-size: 0.8rem; font-weight: 600; padding: 8px 10px; border-radius: 8px; line-height: 1.5; }
-.sub-verdict.safe   { background: rgba(34,211,160,0.1);  color: var(--green); }
-.sub-verdict.warn   { background: rgba(251,191,36,0.1);  color: var(--yellow); }
-.sub-verdict.danger { background: rgba(248,113,113,0.1); color: var(--red); }
+/* Action bar */
+.action-bar{max-width:1100px;margin:1rem auto 0;padding:0 2rem;display:flex;gap:.7rem;flex-wrap:wrap;}
+.btn-calc{flex:1;min-width:140px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:12px;padding:13px 22px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;}
+.btn-calc:hover{opacity:.9;}.btn-calc:active{transform:scale(.98);}
+.btn-secondary{background:var(--card);border:1px solid var(--border2);color:var(--muted2);border-radius:12px;padding:13px 18px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s,color .2s;}
+.btn-secondary:hover{background:var(--border2);color:var(--text);}
 
-/* ── Ko-fi ── */
-.kofi-section {
-  max-width: 1100px; margin: 2.5rem auto 0; padding: 0 2rem 3rem;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-}
-.kofi-btn {
-  display: inline-flex; align-items: center; gap: 9px;
-  background: #7B4F2E; color: #fff; text-decoration: none;
-  padding: 13px 26px; border-radius: 99px;
-  font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.95rem;
-  transition: background 0.2s, transform 0.15s;
-  box-shadow: 0 4px 20px rgba(123,79,46,0.4);
-  letter-spacing: -0.01em;
-}
-.kofi-btn:hover { background: #6a4227; transform: translateY(-2px); }
-.kofi-btn:active { transform: scale(0.97); }
-.kofi-note { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; }
+/* Summary */
+.summary-section{display:none;max-width:1100px;margin:1.3rem auto 0;padding:0 2rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.summary-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem;}
 
-footer { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; text-align: center; font-size: 0.7rem; color: #2e2e3e; font-family: 'Space Mono', monospace; }
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.9rem;}
+.sub-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.sub-card-main{padding:1.1rem;display:flex;flex-direction:column;gap:9px;}
+.sub-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.sub-name{font-weight:700;font-size:.92rem;line-height:1.3;}
+.sub-type{font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+.sub-pct-big{font-family:'Space Mono',monospace;font-size:1.7rem;font-weight:700;line-height:1;}
+.sub-bar-track{background:var(--border2);border-radius:99px;height:5px;overflow:hidden;}
+.sub-bar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.sub-stats{display:flex;gap:.9rem;flex-wrap:wrap;}
+.sub-stat .sl{font-size:.65rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.07em;}
+.sub-stat .sv{font-size:.88rem;font-weight:700;font-family:'Space Mono',monospace;}
+.sub-verdict{font-size:.78rem;font-weight:600;padding:7px 10px;border-radius:8px;line-height:1.5;}
+.sub-verdict.safe{background:rgba(34,211,160,.1);color:var(--green);}
+.sub-verdict.warn{background:rgba(251,191,36,.1);color:var(--yellow);}
+.sub-verdict.danger{background:rgba(248,113,113,.1);color:var(--red);}
 
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  header, .hero, .how-strip, .overall-section, .overall-bar-wrap, .table-section, .action-bar, .summary-section, .kofi-section { padding-left: 1rem; padding-right: 1rem; }
-  .overall-section { grid-template-columns: 1fr 1fr; }
-  .how-step:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border2); }
-  .how-inner { flex-direction: column; }
-  input[type="range"] { width: 80px; }
+/* Planner toggle button */
+.btn-planner{width:100%;background:rgba(124,106,245,.08);border:none;border-top:1px solid var(--border);color:var(--muted2);padding:9px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-planner:hover{background:rgba(124,106,245,.15);color:var(--accent2);}
+.btn-planner.open{color:var(--accent2);background:rgba(124,106,245,.12);}
+
+/* Planner panel */
+.planner-panel{display:none;border-top:1px solid var(--border);background:rgba(0,0,0,.2);}
+.planner-panel.open{display:block;animation:fadeUp .25s ease both;}
+.planner-inner{padding:1rem;}
+.planner-title{font-size:.75rem;font-weight:700;color:var(--muted2);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem;}
+.planner-midsem{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap;}
+.planner-midsem label{font-size:.75rem;color:var(--muted2);font-family:'Space Mono',monospace;white-space:nowrap;}
+.midsem-input{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem;padding:5px 9px;outline:none;transition:border-color .2s;}
+.midsem-input:focus{border-color:var(--accent);}
+.weeks-grid{display:flex;flex-direction:column;gap:.5rem;}
+.week-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03);}
+.week-row.midsem-marker{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);}
+.week-label{font-size:.75rem;font-family:'Space Mono',monospace;color:var(--muted2);min-width:110px;flex-shrink:0;}
+.week-label .wl-month{font-size:.62rem;color:var(--muted);margin-bottom:1px;}
+.week-classes{display:flex;align-items:center;gap:4px;}
+.week-classes span{font-size:.72rem;color:var(--muted);}
+.week-attend-input{width:44px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:.82rem;padding:4px 6px;outline:none;text-align:center;-moz-appearance:textfield;}
+.week-attend-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.week-attend-input:focus{border-color:var(--accent);}
+.week-proj{margin-left:auto;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;}
+.midsem-badge{font-size:.65rem;background:rgba(251,191,36,.15);color:var(--yellow);border:1px solid rgba(251,191,36,.3);border-radius:99px;padding:2px 8px;font-family:'Space Mono',monospace;}
+.planner-result{margin-top:.8rem;padding:10px 12px;border-radius:9px;font-size:.8rem;font-weight:600;line-height:1.5;}
+.planner-result.safe{background:rgba(34,211,160,.1);color:var(--green);}
+.planner-result.danger{background:rgba(248,113,113,.1);color:var(--red);}
+.planner-result.warn{background:rgba(251,191,36,.1);color:var(--yellow);}
+.no-freq-msg{font-size:.78rem;color:var(--muted);padding:12px;text-align:center;font-family:'Space Mono',monospace;}
+.no-freq-msg a{color:var(--accent2);cursor:pointer;text-decoration:underline;}
+
+/* Ko-fi */
+.support-section{max-width:1100px;margin:2.5rem auto 0;padding:0 2rem 2.5rem;}
+.support-inner{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.4rem 1.6rem;text-align:center;}
+.support-label{font-size:.72rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;}
+.support-btns{display:flex;justify-content:center;align-items:center;gap:.8rem;flex-wrap:wrap;}
+.support-btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;border-radius:10px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;transition:transform .15s,opacity .2s;white-space:nowrap;}
+.support-btn:hover{transform:translateY(-2px);opacity:.88;}
+.s-btn-1{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--muted2);}
+.s-btn-2{background:rgba(124,106,245,.15);border:1px solid rgba(124,106,245,.35);color:var(--accent2);}
+.s-btn-3{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 18px rgba(124,106,245,.35);}
+.support-note{font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:.9rem;}
+footer{max-width:1100px;margin:0 auto;padding:0 2rem 1.5rem;text-align:center;font-size:.68rem;color:#2e2e3e;font-family:'Space Mono',monospace;}
+
+@media(max-width:640px){
+  header,.hero,.how-strip,.overall-section,.overall-bar-wrap,.table-section,.action-bar,.summary-section,.support-section{padding-left:1rem;padding-right:1rem;}
+  .overall-section{grid-template-columns:1fr 1fr;}
+  .how-step:not(:last-child){border-right:none;border-bottom:1px solid var(--border2);}
+  .how-inner{flex-direction:column;}
+  input[type=range]{width:75px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Header -->
+<!-- Storage Banner -->
+<div id="storageBanner">
+  <div class="sb-text">
+    <div class="sb-title">💾 Remember your subjects on this device?</div>
+    <div class="sb-desc">AttendanceIQ can save your subjects and lecture counts so you don't retype them next visit.<br/>
+    <strong>Stays only on your device — never sent to any server.</strong> Clear anytime with the Reset button.</div>
+  </div>
+  <div class="sb-btns">
+    <button class="sb-accept" onclick="acceptStorage()">✓ Yes, save on my device</button>
+    <button class="sb-reject" onclick="rejectStorage()">No thanks</button>
+  </div>
+</div>
+
 <header>
   <div class="logo">
     <div class="logo-icon">📊</div>
     <div class="logo-text">Attendance<span>IQ</span></div>
   </div>
-  <div class="req-control">
-    <label>Required %</label>
-    <input type="range" id="reqSlider" min="50" max="100" value="75"
-      oninput="document.getElementById('reqDisplay').textContent=this.value+'%'; liveCalc()"/>
-    <span class="req-val" id="reqDisplay">75%</span>
+  <div class="header-right">
+    <div class="storage-pill" id="storagePill" style="display:none" onclick="toggleStorageConsent()" title="Click to change">
+      <div class="dot" id="storageDot"></div>
+      <span id="storageLabel">not saving</span>
+    </div>
+    <div class="req-control">
+      <label>Required %</label>
+      <input type="range" id="reqSlider" min="50" max="100" value="75"
+        oninput="document.getElementById('reqDisplay').textContent=this.value+'%';liveCalc();autoSave()"/>
+      <span class="req-val" id="reqDisplay">75%</span>
+    </div>
   </div>
 </header>
 
-<!-- Hero -->
 <div class="hero">
-  <h1>Skip or grind?<br/><span class="hi">Your attendance, calculated.</span></h1>
-  <p>Works for any college · any semester · any number of subjects.</p>
+  <h1>Skip or grind?<br/><span class="hi">Know exactly where you stand.</span></h1>
+  <p>All subjects at once · future planner · data saves on your device.</p>
 </div>
 
-<!-- How to use — 3 steps, no friction -->
 <div class="how-strip">
   <div class="how-inner">
     <div class="how-step">
       <div class="step-num">1</div>
-      <div class="step-text">
-        <div class="st">Set your required %</div>
-        <div class="sd">Use the slider top-right (default 75%)</div>
-      </div>
+      <div class="step-text"><div class="st">Set required %</div><div class="sd">Slider top-right (default 75%)</div></div>
     </div>
     <div class="how-step">
       <div class="step-num">2</div>
-      <div class="step-text">
-        <div class="st">Add your subjects</div>
-        <div class="sd">Name · type · lectures held · attended</div>
-      </div>
+      <div class="step-text"><div class="st">Add subjects</div><div class="sd">Name · type · held · attended</div></div>
     </div>
     <div class="how-step">
       <div class="step-num">3</div>
-      <div class="step-text">
-        <div class="st">Hit Calculate</div>
-        <div class="sd">See exactly what you can skip or must attend</div>
-      </div>
+      <div class="step-text"><div class="st">Calculate</div><div class="sd">See skip/attend for each subject</div></div>
+    </div>
+    <div class="how-step">
+      <div class="step-num">4</div>
+      <div class="step-text"><div class="st">Plan future</div><div class="sd">See how bunking next weeks impacts you</div></div>
     </div>
   </div>
 </div>
 
-<!-- Overall Stats -->
+<!-- Stats -->
 <div class="overall-section">
-  <div class="stat-tile t-purple">
-    <div class="s-label">Overall %</div>
-    <div class="s-val" id="overallPct" style="color:var(--accent2)">—</div>
-    <div class="s-sub">across all subjects</div>
-  </div>
-  <div class="stat-tile t-green">
-    <div class="s-label">Total Attended</div>
-    <div class="s-val" id="totalAtt" style="color:var(--green)">—</div>
-    <div class="s-sub">lectures attended</div>
-  </div>
-  <div class="stat-tile t-yellow">
-    <div class="s-label">Total Held</div>
-    <div class="s-val" id="totalHeld" style="color:var(--yellow)">—</div>
-    <div class="s-sub">lectures conducted</div>
-  </div>
-  <div class="stat-tile t-red">
-    <div class="s-label">Subjects at Risk</div>
-    <div class="s-val" id="atRisk" style="color:var(--red)">—</div>
-    <div class="s-sub">below required %</div>
-  </div>
+  <div class="stat-tile t-purple"><div class="s-label">Overall %</div><div class="s-val" id="overallPct" style="color:var(--accent2)">—</div><div class="s-sub">across all subjects</div></div>
+  <div class="stat-tile t-green"><div class="s-label">Total Attended</div><div class="s-val" id="totalAtt" style="color:var(--green)">—</div><div class="s-sub">lectures attended</div></div>
+  <div class="stat-tile t-yellow"><div class="s-label">Total Held</div><div class="s-val" id="totalHeld" style="color:var(--yellow)">—</div><div class="s-sub">lectures conducted</div></div>
+  <div class="stat-tile t-red"><div class="s-label">Subjects at Risk</div><div class="s-val" id="atRisk" style="color:var(--red)">—</div><div class="s-sub">below required %</div></div>
 </div>
 
-<!-- Overall Bar -->
 <div class="overall-bar-wrap">
   <div class="overall-bar-card">
     <div>
       <div class="overall-pct" id="overallPctBig" style="color:var(--accent2)">—</div>
-      <div style="font-size:0.72rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px">Overall</div>
+      <div style="font-size:.7rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-top:4px">Overall</div>
     </div>
     <div class="overall-bar-inner">
-      <div class="bar-labels">
-        <span>0%</span>
-        <span id="reqLineLabel">Required: 75%</span>
-        <span>100%</span>
-      </div>
+      <div class="bar-labels"><span>0%</span><span id="reqLineLabel">Required: 75%</span><span>100%</span></div>
       <div class="bar-track">
         <div class="bar-fill" id="overallBarFill" style="width:0%"></div>
         <div class="req-line" id="reqLineEl" style="left:75%"></div>
@@ -368,7 +287,7 @@ footer { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; text-align: ce
   </div>
 </div>
 
-<!-- Subject Table -->
+<!-- Table -->
 <div class="table-section">
   <div class="section-header">
     <div class="section-title">Your Subjects <span id="subCount">0 subjects</span></div>
@@ -378,23 +297,23 @@ footer { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; text-align: ce
     <table>
       <thead>
         <tr>
-          <th style="width:30px">#</th>
+          <th style="width:28px">#</th>
           <th>Subject Name</th>
           <th class="c">Type</th>
-          <th class="c">Freq / Week</th>
           <th class="c">Total Held</th>
           <th class="c">Attended</th>
+          <th class="c" title="Optional — only needed for the weekly planner">Classes/Week <span style="opacity:.45;font-size:.6rem">optional</span></th>
           <th class="c">Attendance %</th>
           <th class="c">Can Skip / Must Attend</th>
-          <th style="width:30px"></th>
+          <th style="width:28px"></th>
         </tr>
       </thead>
       <tbody id="tableBody">
         <tr id="emptyState">
           <td colspan="9">
             <div class="empty-icon">📋</div>
-            <div>No subjects added yet.</div>
-            <div class="empty-tip">Click "＋ Add Subject" to get started</div>
+            <div>No subjects yet — click ＋ Add Subject</div>
+            <div class="empty-tip">Classes/week is optional — only needed if you want the future planner</div>
           </td>
         </tr>
       </tbody>
@@ -402,294 +321,405 @@ footer { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; text-align: ce
   </div>
 </div>
 
-<!-- Buttons -->
 <div class="action-bar">
-  <button class="btn-calc" onclick="calculate()">⚡ Calculate &amp; Show Full Breakdown</button>
-  <button class="btn-reset" onclick="resetAll()">↺ Clear All</button>
+  <button class="btn-calc" onclick="calculate()">⚡ Calculate &amp; Show Breakdown</button>
+  <button class="btn-secondary" id="clearBtn" onclick="resetAll()">↺ Clear All</button>
 </div>
 
-<!-- Summary Cards -->
+<!-- Summary -->
 <div class="summary-section" id="summarySection">
-  <div class="section-header">
-    <div class="section-title">Subject-wise Breakdown</div>
+  <div class="summary-header">
+    <div class="section-title" style="font-size:.95rem;font-weight:700">Subject-wise Breakdown</div>
+
   </div>
   <div class="summary-grid" id="summaryGrid"></div>
 </div>
 
-<!-- Ko-fi -->
-<div class="kofi-section">
-  <a class="kofi-btn" href="https://ko-fi.com/velvetpulse99" target="_blank" rel="noopener">
-    🍫 Buy me a chocolate
-  </a>
-  <span class="kofi-note">Just ₹50 or so · helps keep AttendanceIQ free for everyone 🙏</span>
+<div class="support-section">
+  <div class="support-inner">
+    <div class="support-label">❤️ AttendanceIQ is free — support if it helped you</div>
+    <div class="support-btns">
+      <a class="support-btn s-btn-3" href="https://razorpay.me/@attendancecalculator" target="_blank" rel="noopener">🙏 Support AttendanceIQ — Pay any amount</a>
+    </div>
+    <div class="support-note">₹10, ₹30, ₹50 — anything works · Keeps the site ad-free · Powered by Razorpay</div>
+  </div>
 </div>
-
-<footer>AttendanceIQ · Free for every college student · Works for any number of subjects</footer>
+<footer>AttendanceIQ · 100% free · Data stays on your device · No tracking, no servers<br/>
+<a href="cgpa.html" style="color:var(--accent2);text-decoration:none;">✨ CGPA Calculator — try it now →</a></footer>
 
 <script>
-let rowId = 0;
+const SITE_URL    = 'https://attendanceiq.vercel.app';
+const CONSENT_KEY = 'aiq_consent';
+const DATA_KEY    = 'aiq_data';
+let storageAllowed = false;
 
-function addRow(data = {}) {
-  // Remove empty state row if present
-  const es = document.getElementById('emptyState');
-  if (es) es.remove();
-
-  rowId++;
-  const id = rowId;
-  const tbody = document.getElementById('tableBody');
-  const tr = document.createElement('tr');
-  tr.id = 'row-' + id;
-
-  const typeOpts = ['Theory','Lab','Tutorial','Practical']
-    .map(t => `<option value="${t}" ${(data.type||'Theory')===t?'selected':''}>${t}</option>`)
-    .join('');
-
-  tr.innerHTML = `
-    <td style="font-family:'Space Mono',monospace;color:var(--muted);font-size:0.78rem;text-align:center">${rowId}</td>
-    <td><input type="text" placeholder="e.g. Mathematics" value="${data.name||''}" oninput="liveCalc()"/></td>
-    <td><select onchange="liveCalc()">${typeOpts}</select></td>
-    <td><input type="number" placeholder="3"  value="${data.freq||''}"     min="1" oninput="liveCalc()"/></td>
-    <td><input type="number" placeholder="0"  value="${data.held||''}"     min="0" oninput="liveCalc()"/></td>
-    <td><input type="number" placeholder="0"  value="${data.attended||''}" min="0" oninput="liveCalc()"/></td>
-    <td class="pct-cell" id="pct-${id}">
-      <span class="pct-badge na">—</span>
-      <div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div>
-    </td>
-    <td class="verdict-cell" id="vrd-${id}"><span class="nd">—</span></td>
-    <td><button class="btn-del" onclick="deleteRow(${id})" title="Remove row">✕</button></td>
-  `;
-  tbody.appendChild(tr);
-  updateSubCount();
-  liveCalc();
-
-  // Focus the subject name input for fast typing
-  tr.querySelector('input[type="text"]').focus();
+// ── Storage consent ──
+function initStorage() {
+  const c = localStorage.getItem(CONSENT_KEY);
+  if (c === 'yes') { storageAllowed = true; updateStorageUI(true); loadSaved(); }
+  else if (c === 'no') { updateStorageUI(false); }
+  else { setTimeout(() => { document.getElementById('storageBanner').style.display = 'flex'; }, 1200); }
 }
-
-function deleteRow(id) {
-  const row = document.getElementById('row-' + id);
-  if (row) row.remove();
-  const tbody = document.getElementById('tableBody');
-  if (!tbody.querySelector('tr:not(#emptyState)')) {
-    const es = document.createElement('tr');
-    es.id = 'emptyState';
-    es.innerHTML = `<td colspan="9"><div class="empty-icon">📋</div><div>No subjects added yet.</div><div class="empty-tip">Click "＋ Add Subject" to get started</div></td>`;
-    tbody.appendChild(es);
-  }
-  updateSubCount();
-  liveCalc();
+function acceptStorage() {
+  localStorage.setItem(CONSENT_KEY, 'yes');
+  storageAllowed = true;
+  document.getElementById('storageBanner').style.display = 'none';
+  updateStorageUI(true);
+  autoSave();
 }
-
-function updateSubCount() {
-  const n = document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').length;
-  document.getElementById('subCount').textContent = n + ' subject' + (n !== 1 ? 's' : '');
+function rejectStorage() {
+  localStorage.setItem(CONSENT_KEY, 'no');
+  document.getElementById('storageBanner').style.display = 'none';
+  updateStorageUI(false);
 }
-
-function getRows() {
-  const rows = [];
-  document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').forEach(tr => {
-    const inputs = tr.querySelectorAll('input');
-    const sel    = tr.querySelector('select');
-    rows.push({
-      id:       tr.id.replace('row-', ''),
-      name:     inputs[0]?.value.trim() || '',
-      type:     sel?.value || 'Theory',
-      freq:     parseInt(inputs[1]?.value) || 0,
-      held:     parseInt(inputs[2]?.value) || 0,
-      attended: parseInt(inputs[3]?.value) || 0,
-    });
-  });
-  return rows;
-}
-
-function getReq() { return parseInt(document.getElementById('reqSlider').value); }
-
-function pctColor(pct, req) {
-  if (pct >= req)     return { cls: 'green',  color: 'var(--green)' };
-  if (pct >= req - 5) return { cls: 'yellow', color: 'var(--yellow)' };
-  return                     { cls: 'red',    color: 'var(--red)' };
-}
-
-function calcSkip(att, held, req) {
-  return Math.floor(att * 100 / req - held);
-}
-
-function calcMustAttend(att, held, req) {
-  if (req >= 100) return Math.max(0, held - att);
-  return Math.max(0, Math.ceil((req * held - 100 * att) / (100 - req)));
-}
-
-function liveCalc() {
-  const req = getReq();
-  const rows = getRows();
-  let totalHeld = 0, totalAtt = 0, atRisk = 0;
-
-  rows.forEach(r => {
-    const pctCell = document.getElementById('pct-' + r.id);
-    const vrdCell = document.getElementById('vrd-' + r.id);
-    if (!pctCell) return;
-
-    if (r.held <= 0) {
-      pctCell.innerHTML = `<span class="pct-badge na">—</span><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div>`;
-      vrdCell.innerHTML = `<span class="nd">Enter data</span>`;
-      return;
-    }
-
-    const att = Math.min(r.attended, r.held);
-    const pct = (att / r.held) * 100;
-    const { cls, color } = pctColor(pct, req);
-
-    pctCell.innerHTML = `
-      <span class="pct-badge ${cls}">${pct.toFixed(1)}%</span>
-      <div class="mini-bar-wrap"><div class="mini-bar" style="width:${Math.min(pct,100)}%;background:${color}"></div></div>`;
-
-    if (pct >= req) {
-      const skip = calcSkip(att, r.held, req);
-      vrdCell.innerHTML = skip > 0
-        ? `<span class="can-skip">✓ Skip ${skip} class${skip===1?'':'es'}</span>`
-        : `<span class="on-edge">⚠ Don't skip more</span>`;
-    } else {
-      const must = calcMustAttend(att, r.held, req);
-      vrdCell.innerHTML = `<span class="must-attend">⚑ Attend ${must} more</span>`;
-      atRisk++;
-    }
-
-    totalHeld += r.held;
-    totalAtt  += att;
-  });
-
-  // Update overall tiles & bar
-  if (totalHeld > 0) {
-    const ovPct = (totalAtt / totalHeld) * 100;
-    const { cls, color } = pctColor(ovPct, req);
-
-    document.getElementById('overallPct').textContent    = ovPct.toFixed(1) + '%';
-    document.getElementById('overallPct').style.color    = color;
-    document.getElementById('overallPctBig').textContent = ovPct.toFixed(1) + '%';
-    document.getElementById('overallPctBig').style.color = color;
-    document.getElementById('totalAtt').textContent      = totalAtt;
-    document.getElementById('totalHeld').textContent     = totalHeld;
-    document.getElementById('atRisk').textContent        = atRisk;
-
-    const fill = document.getElementById('overallBarFill');
-    fill.style.width      = Math.min(ovPct, 100) + '%';
-    fill.style.background = color;
-    document.getElementById('reqLineEl').style.left      = req + '%';
-    document.getElementById('reqLineLabel').textContent  = 'Required: ' + req + '%';
-
-    const vEl = document.getElementById('overallVerdict');
-    if (ovPct >= req) {
-      const skip = calcSkip(totalAtt, totalHeld, req);
-      vEl.className   = 'verdict-pill safe';
-      vEl.textContent = skip > 0 ? `✓ Can skip ${skip} overall` : '✓ Just at limit';
-    } else {
-      const must = calcMustAttend(totalAtt, totalHeld, req);
-      vEl.className   = 'verdict-pill danger';
-      vEl.textContent = `⚠ Need ${must} more classes`;
+function toggleStorageConsent() {
+  if (storageAllowed) {
+    if (confirm('Turn off saving? Your current data will stay until you clear it, but new changes won\'t be saved.')) {
+      localStorage.setItem(CONSENT_KEY, 'no');
+      storageAllowed = false;
+      updateStorageUI(false);
     }
   } else {
-    ['overallPct','overallPctBig','totalAtt','totalHeld','atRisk'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = '—';
-    });
-    document.getElementById('overallBarFill').style.width = '0%';
-    const vEl = document.getElementById('overallVerdict');
-    vEl.className = 'verdict-pill idle';
-    vEl.textContent = 'Add subjects below ↓';
+    if (confirm('Turn on saving? Your subjects and data will be remembered on this device.')) {
+      acceptStorage();
+    }
+  }
+}
+function updateStorageUI(on) {
+  const pill = document.getElementById('storagePill');
+  pill.style.display = 'flex';
+  document.getElementById('storageDot').className = 'dot' + (on ? ' on' : '');
+  document.getElementById('storageLabel').textContent = on ? 'saving' : 'not saving';
+  document.getElementById('storageLabel').style.color = on ? 'var(--green)' : 'var(--muted)';
+}
+function autoSave() {
+  if (!storageAllowed) return;
+  try { localStorage.setItem(DATA_KEY, JSON.stringify({ rows: getRows(), req: getReq() })); }
+  catch(e) {}
+}
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(DATA_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.req) { document.getElementById('reqSlider').value = d.req; document.getElementById('reqDisplay').textContent = d.req + '%'; }
+    if (d.rows && d.rows.length) { clearTable(); d.rows.forEach(r => addRow(r, true)); updateSubCount(); liveCalc(); }
+  } catch(e) {}
+}
+
+// ── Table ──
+let rowId = 0;
+function clearTable() { document.getElementById('tableBody').innerHTML = ''; rowId = 0; }
+function restoreEmpty() {
+  if (document.getElementById('emptyState')) return;
+  const es = document.createElement('tr'); es.id = 'emptyState';
+  es.innerHTML = `<td colspan="9"><div class="empty-icon">📋</div><div>No subjects yet — click ＋ Add Subject</div><div class="empty-tip">Classes/week is optional — only needed if you want the future planner</div></td>`;
+  document.getElementById('tableBody').appendChild(es);
+}
+function addRow(data={}, silent=false) {
+  document.getElementById('emptyState')?.remove();
+  rowId++;
+  const id = rowId;
+  const tr = document.createElement('tr'); tr.id = 'row-'+id;
+  const typeOpts = ['Theory','Lab','Tutorial','Practical'].map(t=>`<option value="${t}" ${(data.type||'Theory')===t?'selected':''}>${t}</option>`).join('');
+  tr.innerHTML = `
+    <td style="font-family:'Space Mono',monospace;color:var(--muted);font-size:.75rem;text-align:center">${rowId}</td>
+    <td><input type="text" placeholder="e.g. Linear Algebra" value="${data.name||''}" oninput="liveCalc();autoSave()"/></td>
+    <td><select onchange="liveCalc();autoSave()">${typeOpts}</select></td>
+    <td><input type="number" placeholder="0" value="${data.held||''}" min="0" oninput="liveCalc();autoSave()"/></td>
+    <td><input type="number" placeholder="0" value="${data.attended||''}" min="0" oninput="liveCalc();autoSave()"/></td>
+    <td class="freq-cell"><input type="number" placeholder="—" value="${data.freq||''}" min="1" max="7" title="How many times per week? (Only needed for the weekly planner)" oninput="autoSave()"/><div class="freq-hint">for planner</div></td>
+    <td class="pct-cell" id="pct-${id}"><span class="pct-badge na">—</span><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div></td>
+    <td class="verdict-cell" id="vrd-${id}"><span class="nd">—</span></td>
+    <td><button class="btn-del" onclick="deleteRow(${id})">✕</button></td>`;
+  document.getElementById('tableBody').appendChild(tr);
+  updateSubCount(); liveCalc();
+  if (!silent && !data.name) tr.querySelector('input[type=text]').focus();
+  if (!silent) autoSave();
+}
+function deleteRow(id) {
+  document.getElementById('row-'+id)?.remove();
+  if (!document.getElementById('tableBody').querySelector('tr:not(#emptyState)')) restoreEmpty();
+  updateSubCount(); liveCalc(); autoSave();
+}
+function updateSubCount() {
+  const n = document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').length;
+  document.getElementById('subCount').textContent = n+' subject'+(n!==1?'s':'');
+}
+function getRows() {
+  return [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')].map(tr => {
+    const i = tr.querySelectorAll('input');
+    return { name:i[0]?.value.trim()||'', type:tr.querySelector('select')?.value||'Theory',
+             held:parseInt(i[1]?.value)||0, attended:parseInt(i[2]?.value)||0,
+             freq:parseInt(i[3]?.value)||0 };
+  });
+}
+function getReq(){return parseInt(document.getElementById('reqSlider').value);}
+function pctColor(p,r){return p>=r?{cls:'green',color:'var(--green)'}:p>=r-5?{cls:'yellow',color:'var(--yellow)'}:{cls:'red',color:'var(--red)'};}
+function calcSkip(a,h,r){return Math.floor(a*100/r-h);}
+function calcMust(a,h,r){return r>=100?Math.max(0,h-a):Math.max(0,Math.ceil((r*h-100*a)/(100-r)));}
+
+function liveCalc() {
+  const req=getReq(), rows=getRows();
+  let th=0,ta=0,risk=0;
+  // rowId-indexed pct/vrd cells - we need to match by DOM order
+  const trs=[...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')];
+  trs.forEach((tr,idx)=>{
+    const r=rows[idx]; if(!r) return;
+    const rid=tr.id.replace('row-','');
+    const pe=document.getElementById('pct-'+rid), ve=document.getElementById('vrd-'+rid);
+    if(!pe) return;
+    if(r.held<=0){pe.innerHTML=`<span class="pct-badge na">—</span><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:var(--muted)"></div></div>`;ve.innerHTML=`<span class="nd">Enter data</span>`;return;}
+    const a=Math.min(r.attended,r.held),p=(a/r.held)*100,{cls,color}=pctColor(p,req);
+    pe.innerHTML=`<span class="pct-badge ${cls}">${p.toFixed(1)}%</span><div class="mini-bar-wrap"><div class="mini-bar" style="width:${Math.min(p,100)}%;background:${color}"></div></div>`;
+    if(p>=req){const s=calcSkip(a,r.held,req);ve.innerHTML=s>0?`<span class="can-skip">✓ Skip ${s}</span>`:`<span class="on-edge">⚠ Don't skip</span>`;}
+    else{ve.innerHTML=`<span class="must-attend">⚑ Attend ${calcMust(a,r.held,req)} more</span>`;risk++;}
+    th+=r.held;ta+=a;
+  });
+  if(th>0){
+    const ov=(ta/th)*100,{color}=pctColor(ov,req);
+    ['overallPct','overallPctBig'].forEach(id=>{const el=document.getElementById(id);el.textContent=ov.toFixed(1)+'%';el.style.color=color;});
+    document.getElementById('totalAtt').textContent=ta;
+    document.getElementById('totalHeld').textContent=th;
+    document.getElementById('atRisk').textContent=risk;
+    const f=document.getElementById('overallBarFill');f.style.width=Math.min(ov,100)+'%';f.style.background=color;
+    document.getElementById('reqLineEl').style.left=req+'%';
+    document.getElementById('reqLineLabel').textContent='Required: '+req+'%';
+    const vEl=document.getElementById('overallVerdict');
+    if(ov>=req){const s=calcSkip(ta,th,req);vEl.className='verdict-pill safe';vEl.textContent=s>0?`✓ Can skip ${s} overall`:'✓ Just at limit';}
+    else{vEl.className='verdict-pill danger';vEl.textContent=`⚠ Need ${calcMust(ta,th,req)} more classes`;}
+  }else{
+    ['overallPct','overallPctBig','totalAtt','totalHeld','atRisk'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+    document.getElementById('overallBarFill').style.width='0%';
+    const vEl=document.getElementById('overallVerdict');vEl.className='verdict-pill idle';vEl.textContent='Add subjects below ↓';
   }
 }
 
+// ── Weekly planner helpers ──
+function getWeekLabel(date) {
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d1=new Date(date); const d2=new Date(date); d2.setDate(d2.getDate()+6);
+  return { month: months[d1.getMonth()], label: `${d1.getDate()} ${months[d1.getMonth()]} – ${d2.getDate()} ${months[d2.getMonth()]}` };
+}
+function getMonday(d) {
+  const date=new Date(d); const day=date.getDay(); const diff=date.getDate()-day+(day===0?-6:1);
+  date.setDate(diff); return date;
+}
+function buildWeeks(n=8) {
+  const weeks=[]; let d=getMonday(new Date());
+  for(let i=0;i<n;i++){weeks.push(new Date(d));d.setDate(d.getDate()+7);}
+  return weeks;
+}
+
+// ── Build planner for one subject ──
+function buildPlanner(cardEl, subjectData) {
+  const panel = cardEl.querySelector('.planner-panel');
+  const inner = panel.querySelector('.planner-inner');
+  const req   = getReq();
+
+  if(!subjectData.freq || subjectData.freq<=0) {
+    inner.innerHTML=`<div class="no-freq-msg">Add <strong>Classes/Week</strong> for this subject in the table above to use the planner.<br/><a onclick="document.querySelector('.tbl-wrap').scrollIntoView({behavior:'smooth'})">Go to table ↑</a></div>`;
+    return;
+  }
+
+  const weeks = buildWeeks(8);
+  const midsemInput = inner.querySelector('.midsem-input');
+  const midsemDate  = midsemInput?.value ? new Date(midsemInput.value) : null;
+
+  let html=`<div class="planner-title">📅 Weekly Attendance Planner — ${subjectData.name||'Subject'}</div>
+  <div class="planner-midsem">
+    <label>📌 Mid-sem / Exam date (optional):</label>
+    <input type="date" class="midsem-input" value="${midsemInput?.value||''}" onchange="rebuildPlanner(this)"/>
+  </div>
+  <div style="font-size:.72rem;color:var(--muted2);margin-bottom:.8rem;font-family:'Space Mono',monospace;">
+    Currently: ${subjectData.attended}/${subjectData.held} = ${((subjectData.attended/subjectData.held)*100).toFixed(1)}% · 
+    Default assumes you attend all ${subjectData.freq} classes each week · Change the number to plan bunks
+  </div>
+  <div class="weeks-grid">`;
+
+  let curHeld=subjectData.held, curAtt=subjectData.attended;
+  let midsemShown=false;
+
+  weeks.forEach((weekStart,idx)=>{
+    const {label}=getWeekLabel(weekStart);
+    const weekEnd=new Date(weekStart); weekEnd.setDate(weekEnd.getDate()+6);
+    const isMidsem=midsemDate && midsemDate>=weekStart && midsemDate<=weekEnd;
+    const isBefore=midsemDate && weekEnd<midsemDate;
+
+    curHeld+=subjectData.freq;
+    const projPct=curHeld>0?((curAtt+subjectData.freq)/curHeld*100):0;
+    const {color}=pctColor((curAtt/curHeld)*100||0,req);
+
+    html+=`<div class="week-row${isMidsem?' midsem-marker':''}">
+      <div class="week-label"><div class="wl-month">${getWeekLabel(weekStart).month}</div>Week ${idx+1}: ${label}</div>
+      <div class="week-classes">
+        <span>${subjectData.freq} classes · attending:</span>
+        <input type="number" class="week-attend-input" data-held="${curHeld}" data-week="${idx}"
+          value="${subjectData.freq}" min="0" max="${subjectData.freq}"
+          oninput="updatePlannerRow(this,${subjectData.held},${subjectData.attended},${subjectData.freq},${req},'${cardEl.id}')"/>
+        <span>/ ${subjectData.freq}</span>
+      </div>
+      ${isMidsem?`<span class="midsem-badge">📌 Exam week</span>`:''}
+      <div class="week-proj" id="proj-${cardEl.id}-${idx}" style="color:${color}">—</div>
+    </div>`;
+    curAtt+=subjectData.freq; // default full attendance shown first
+  });
+
+  html+=`</div><div class="planner-result" id="plannerResult-${cardEl.id}"></div>`;
+  inner.innerHTML=html;
+
+  // Attach midsem change
+  inner.querySelector('.midsem-input').onchange=function(){rebuildPlannerForCard(cardEl,subjectData);};
+
+  // Compute initial projections
+  recomputeAllWeeks(cardEl, subjectData.held, subjectData.attended, subjectData.freq, req);
+}
+
+function rebuildPlannerForCard(cardEl, subjectData) {
+  buildPlanner(cardEl, subjectData);
+}
+
+function updatePlannerRow(input, baseHeld, baseAtt, freq, req, cardId) {
+  recomputeAllWeeks(document.getElementById(cardId), baseHeld, baseAtt, freq, req);
+}
+
+function recomputeAllWeeks(cardEl, baseHeld, baseAtt, freq, req) {
+  const inputs = [...cardEl.querySelectorAll('.week-attend-input')];
+  let held=baseHeld, att=baseAtt;
+  let midsemPct=null;
+  const midsemInput=cardEl.querySelector('.midsem-input');
+  const midsemDate=midsemInput?.value?new Date(midsemInput.value):null;
+  const weeks=buildWeeks(8);
+
+  inputs.forEach((inp,idx)=>{
+    const weekStart=weeks[idx];
+    const weekEnd=new Date(weekStart); weekEnd.setDate(weekEnd.getDate()+6);
+    const attend=Math.min(parseInt(inp.value)||0, freq);
+    held+=freq; att+=attend;
+    const pct=held>0?(att/held*100):0;
+    const {color}=pctColor(pct,req);
+    const projEl=document.getElementById(`proj-${cardEl.id}-${idx}`);
+    if(projEl){projEl.textContent=pct.toFixed(1)+'%';projEl.style.color=color;}
+    if(midsemDate && weekEnd>=midsemDate && midsemPct===null) midsemPct=pct;
+  });
+
+  // Final result
+  const finalPct=held>0?(att/held*100):0;
+  const {color}=pctColor(finalPct,req);
+  const resultEl=document.getElementById(`plannerResult-${cardEl.id}`);
+  if(!resultEl)return;
+  let msg='';
+  if(midsemDate&&midsemPct!==null) msg+=`📌 At mid-sem: <strong>${midsemPct.toFixed(1)}%</strong>${midsemPct>=req?` ✓ Safe`:`  ⚠ ${calcMust(att,held,req)} more needed`}<br/>`;
+  msg+=`📊 After 8 weeks: <strong>${finalPct.toFixed(1)}%</strong>`;
+  const cls=finalPct>=req?'safe':finalPct>=req-5?'warn':'danger';
+  resultEl.className='planner-result '+cls;
+  resultEl.innerHTML=msg;
+}
+
+// ── Calculate & build cards ──
 function calculate() {
   liveCalc();
-  const req  = getReq();
-  const rows = getRows().filter(r => r.held > 0);
-  if (!rows.length) { alert('Please add at least one subject with total and attended lectures filled in.'); return; }
+  const req=getReq(), rows=getRows().filter(r=>r.held>0);
+  if(!rows.length){alert('Please add at least one subject with lecture data.');return;}
+  const grid=document.getElementById('summaryGrid');
+  grid.innerHTML='';
 
-  const grid = document.getElementById('summaryGrid');
-  grid.innerHTML = '';
+  rows.forEach((r,idx)=>{
+    const a=Math.min(r.attended,r.held),p=(a/r.held)*100,{cls,color}=pctColor(p,req);
+    const mn=Math.ceil(req/100*r.held),sf=Math.max(0,mn-a),must=calcMust(a,r.held,req);
+    let vt,vc;
+    if(p>=req){const s=calcSkip(a,r.held,req);if(s>0){vt=`🟢 You can bunk up to ${s} more ${r.type.toLowerCase()} class${s===1?'':'es'} and stay above ${req}%.`;vc='safe';}
+    else{vt=`🟡 You're right at the edge — one more skip puts you below ${req}%.`;vc='warn';}}
+    else{vt=`🔴 Attend the next ${must} class${must===1?'':'es'} in a row to reach ${req}%.`;vc='danger';}
 
-  rows.forEach(r => {
-    const att = Math.min(r.attended, r.held);
-    const pct = (att / r.held) * 100;
-    const { cls, color } = pctColor(pct, req);
-    const minNeeded  = Math.ceil(req / 100 * r.held);
-    const shortfall  = Math.max(0, minNeeded - att);
-
-    let verdictText, verdictCls;
-    if (pct >= req) {
-      const skip = calcSkip(att, r.held, req);
-      if (skip > 0) {
-        verdictText = `🟢 You can bunk up to ${skip} more ${r.type.toLowerCase()} class${skip===1?'':'es'} and stay above ${req}%.`;
-        verdictCls  = 'safe';
-      } else {
-        verdictText = `🟡 You're right at the edge — one more skip puts you below ${req}%.`;
-        verdictCls  = 'warn';
-      }
-    } else {
-      const must = calcMustAttend(att, r.held, req);
-      verdictText = `🔴 Attend the next ${must} class${must===1?'':'es'} in a row (no skipping) to reach ${req}%.`;
-      verdictCls  = 'danger';
-    }
-
-    const card = document.createElement('div');
-    card.className = 'sub-card';
-    card.innerHTML = `
-      <div class="sub-card-header">
-        <div>
-          <div class="sub-name">${r.name || 'Unnamed Subject'}</div>
-          <div class="sub-type">${r.type}${r.freq ? ' · ' + r.freq + '/week' : ''}</div>
+    const cardId='subcard-'+idx;
+    const card=document.createElement('div');
+    card.className='sub-card'; card.id=cardId;
+    card.innerHTML=`
+      <div class="sub-card-main">
+        <div class="sub-card-header">
+          <div><div class="sub-name">${r.name||'Unnamed Subject'}</div><div class="sub-type">${r.type}${r.freq?' · '+r.freq+'/week':''}</div></div>
+          <div class="sub-pct-big" style="color:${color}">${p.toFixed(1)}%</div>
         </div>
-        <div class="sub-pct-big" style="color:${color}">${pct.toFixed(1)}%</div>
+        <div class="sub-bar-track"><div class="sub-bar-fill" style="width:${Math.min(p,100)}%;background:${color}"></div></div>
+        <div class="sub-stats">
+          <div class="sub-stat"><div class="sl">Attended</div><div class="sv">${a}</div></div>
+          <div class="sub-stat"><div class="sl">Total</div><div class="sv">${r.held}</div></div>
+          <div class="sub-stat"><div class="sl">Min needed</div><div class="sv">${mn}</div></div>
+          <div class="sub-stat"><div class="sl">Shortfall</div><div class="sv" style="color:${sf>0?'var(--red)':'var(--green)'}">${sf>0?sf:'✓ 0'}</div></div>
+        </div>
+        <div class="sub-verdict ${vc}">${vt}</div>
       </div>
-      <div class="sub-bar-track">
-        <div class="sub-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div>
-      </div>
-      <div class="sub-stats">
-        <div class="sub-stat"><div class="sl">Attended</div><div class="sv">${att}</div></div>
-        <div class="sub-stat"><div class="sl">Total</div><div class="sv">${r.held}</div></div>
-        <div class="sub-stat"><div class="sl">Min needed</div><div class="sv">${minNeeded}</div></div>
-        <div class="sub-stat"><div class="sl">Shortfall</div><div class="sv" style="color:${shortfall>0?'var(--red)':'var(--green)'}">${shortfall > 0 ? shortfall : '✓ 0'}</div></div>
-      </div>
-      <div class="sub-verdict ${verdictCls}">${verdictText}</div>
-    `;
+      <button class="btn-planner" onclick="togglePlanner('${cardId}',${JSON.stringify(r).replace(/"/g,'&quot;')})">
+        📅 Plan future weeks
+      </button>
+      <div class="planner-panel" id="plan-${cardId}">
+        <div class="planner-inner"></div>
+      </div>`;
     grid.appendChild(card);
   });
 
-  const ss = document.getElementById('summarySection');
-  ss.style.display = 'block';
-  ss.style.animation = 'none';
-  void ss.offsetWidth;
-  ss.style.animation = 'fadeUp 0.4s ease both';
-  setTimeout(() => ss.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  const ss=document.getElementById('summarySection');
+  ss.style.display='block';ss.style.animation='none';void ss.offsetWidth;ss.style.animation='fadeUp .4s ease both';
+  setTimeout(()=>ss.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
 
+function togglePlanner(cardId, subjectData) {
+  const card=document.getElementById(cardId);
+  const panel=document.getElementById('plan-'+cardId);
+  const btn=card.querySelector('.btn-planner');
+  const isOpen=panel.classList.contains('open');
+  if(!isOpen){
+    panel.classList.add('open'); btn.classList.add('open');
+    btn.textContent='▲ Hide planner';
+    buildPlanner(card, subjectData);
+  }else{
+    panel.classList.remove('open'); btn.classList.remove('open');
+    btn.innerHTML='📅 Plan future weeks';
+  }
+}
+
+
+let clearConfirm = false;
 function resetAll() {
-  if (!confirm('Clear all subjects and start fresh?')) return;
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-  const es = document.createElement('tr');
-  es.id = 'emptyState';
-  es.innerHTML = `<td colspan="9"><div class="empty-icon">📋</div><div>No subjects added yet.</div><div class="empty-tip">Click "＋ Add Subject" to get started</div></td>`;
-  tbody.appendChild(es);
-  document.getElementById('summarySection').style.display = 'none';
-  rowId = 0;
+  const btn = document.getElementById('clearBtn');
+  if (!clearConfirm) {
+    clearConfirm = true;
+    btn.textContent = '⚠ Tap again to confirm';
+    btn.style.color = 'var(--red)';
+    btn.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      clearConfirm = false;
+      btn.textContent = '↺ Clear All';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 3000);
+    return;
+  }
+  clearConfirm = false;
+  btn.textContent = '↺ Clear All';
+  btn.style.color = '';
+  btn.style.borderColor = '';
+  clearTable();
+  restoreEmpty();
   updateSubCount();
   liveCalc();
+  document.getElementById('summarySection').style.display = 'none';
+  try { localStorage.removeItem(DATA_KEY); } catch(e) {}
 }
 
-// Allow Enter to add a new row when in last input
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
-    const allRows = [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')];
-    const lastRow = allRows[allRows.length - 1];
-    if (lastRow) {
-      const inputs = [...lastRow.querySelectorAll('input')];
-      if (inputs.includes(e.target) && inputs.indexOf(e.target) === inputs.length - 1) {
-        addRow();
-      }
-    }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.tagName==='INPUT'){
+    const rows=[...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')];
+    const last=rows[rows.length-1];
+    if(last){const inp=[...last.querySelectorAll('input')];if(inp.includes(e.target)&&inp.indexOf(e.target)===inp.length-1)addRow();}
   }
 });
+
+initStorage();
+restoreEmpty();
+updateSubCount();
+liveCalc();
 </script>
 </body>
 </html>

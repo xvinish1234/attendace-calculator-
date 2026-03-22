@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CGPA Calculator — AttendanceIQ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0a0f;--card:#16161f;--border:#23232f;--border2:#2e2e3e;--accent:#7c6af5;--accent2:#a78bfa;--green:#22d3a0;--yellow:#fbbf24;--red:#f87171;--blue:#38bdf8;--text:#e8e8f0;--muted:#6b6b80;--muted2:#9191a8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:100px;
+  background-image:radial-gradient(ellipse 60% 40% at 30% 0%,rgba(56,189,248,.08) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 30% at 80% 80%,rgba(124,106,245,.08) 0%,transparent 50%);}
+
+/* Storage banner */
+#storageBanner{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:#1a1a26;border-top:1px solid var(--border2);padding:1rem 1.5rem;display:none;align-items:flex-start;gap:1rem;flex-wrap:wrap;box-shadow:0 -8px 32px rgba(0,0,0,.5);}
+.sb-text{flex:1;min-width:200px;}.sb-title{font-size:.88rem;font-weight:700;margin-bottom:3px;}.sb-desc{font-size:.75rem;color:var(--muted2);line-height:1.5;}.sb-desc strong{color:var(--green);}
+.sb-btns{display:flex;gap:.6rem;align-items:center;}
+.sb-accept{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;}
+.sb-reject{background:transparent;color:var(--muted2);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;}
+
+/* Header */
+header{padding:2rem 2rem 0;max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--blue),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.logo-text{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:var(--text);}.logo-text span{color:var(--accent2);}
+.logo-sub{font-size:.7rem;font-family:'Space Mono',monospace;color:var(--muted);margin-top:1px;}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.storage-pill{display:flex;align-items:center;gap:5px;font-size:.7rem;font-family:'Space Mono',monospace;color:var(--muted);cursor:pointer;}
+.storage-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);}
+.storage-pill .dot.on{background:var(--green);}
+.nav-link{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;font-size:.8rem;font-weight:600;color:var(--muted2);text-decoration:none;transition:all .2s;}
+.nav-link:hover{border-color:var(--accent);color:var(--accent2);}
+
+/* Hero */
+.hero{max-width:1100px;margin:2rem auto 0;padding:0 2rem;}
+.hero h1{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:.4rem;}
+.hero h1 .hi{color:var(--blue);}
+.hero p{color:var(--muted2);font-size:.92rem;}
+
+/* Grade scale editor */
+.scale-section{max-width:1100px;margin:1.8rem auto 0;padding:0 2rem;}
+.scale-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.4rem 1.6rem;}
+.scale-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.scale-title{font-size:.9rem;font-weight:700;}
+.scale-sub{font-size:.75rem;color:var(--muted2);margin-top:2px;}
+.scale-badge{font-size:.68rem;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);color:var(--blue);border-radius:99px;padding:3px 10px;font-family:'Space Mono',monospace;}
+.scale-grid{display:flex;flex-wrap:wrap;gap:.5rem;}
+.grade-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;}
+.grade-chip .gl{font-family:'Space Mono',monospace;font-size:.8rem;font-weight:700;min-width:22px;}
+.grade-chip .gp{width:38px;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--accent2);font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;text-align:center;outline:none;padding:1px 2px;}
+.grade-chip .gp:focus{border-bottom-color:var(--accent);}
+.scale-note{font-size:.72rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:.8rem;}
+
+/* Stats */
+.stats-section{max-width:1100px;margin:1.5rem auto 0;padding:0 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;position:relative;overflow:hidden;}
+.stat-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0;}
+.t-blue::before{background:linear-gradient(90deg,var(--blue),var(--accent2));}
+.t-purple::before{background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.t-green::before{background:var(--green);}
+.t-yellow::before{background:var(--yellow);}
+.s-label{font-size:.7rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:6px;}
+.s-val{font-size:1.9rem;font-weight:800;font-family:'Space Mono',monospace;line-height:1;}
+.s-sub{font-size:.73rem;color:var(--muted2);margin-top:3px;}
+
+/* CGPA bar */
+.cgpa-bar-wrap{max-width:1100px;margin:.8rem auto 0;padding:0 2rem;}
+.cgpa-bar-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;}
+.cgpa-big{font-family:'Space Mono',monospace;font-size:3rem;font-weight:700;line-height:1;min-width:110px;}
+.cgpa-bar-inner{flex:1;min-width:180px;}
+.bar-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:5px;}
+.bar-track{background:var(--border2);border-radius:99px;height:10px;position:relative;}
+.bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.cgpa-verdict{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:99px;font-size:.8rem;font-weight:600;white-space:nowrap;}
+.cgpa-verdict.great{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25);}
+.cgpa-verdict.good{background:rgba(56,189,248,.12);color:var(--blue);border:1px solid rgba(56,189,248,.25);}
+.cgpa-verdict.okay{background:rgba(251,191,36,.12);color:var(--yellow);border:1px solid rgba(251,191,36,.25);}
+.cgpa-verdict.low{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25);}
+.cgpa-verdict.idle{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border2);}
+
+/* Semester tabs */
+.sem-bar{max-width:1100px;margin:1.5rem auto 0;padding:0 2rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.sem-tab{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;color:var(--text);}
+.sem-tab.active{background:rgba(56,189,248,.15);border-color:rgba(56,189,248,.4);color:var(--blue);}
+.sem-tab:hover:not(.active){border-color:var(--accent2);color:var(--accent2);}
+.btn-add-sem{background:rgba(255,255,255,.04);border:1px dashed var(--border2);border-radius:8px;padding:6px 12px;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .2s;}
+.btn-add-sem:hover{border-color:var(--accent2);color:var(--accent2);}
+.sem-del{background:none;border:none;color:var(--muted);font-size:.72rem;cursor:pointer;margin-left:5px;padding:0 2px;opacity:.5;transition:opacity .2s;}
+.sem-del:hover{opacity:1;color:var(--red);}
+
+/* Semester header info */
+.sem-info{max-width:1100px;margin:1.2rem auto 0;padding:0 2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.sem-name-input{background:transparent;border:none;border-bottom:2px solid var(--border2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:700;padding:3px 2px;outline:none;transition:border-color .2s;min-width:140px;}
+.sem-name-input:focus{border-bottom-color:var(--accent);}
+.sgpa-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border2);border-radius:99px;padding:5px 14px;font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;}
+.sgpa-pill .sp-label{color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;}
+.credits-pill{font-size:.78rem;color:var(--muted2);font-family:'Space Mono',monospace;}
+
+/* Table */
+.table-section{max-width:1100px;margin:1rem auto 0;padding:0 2rem;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem;}
+.section-title{font-size:.9rem;font-weight:700;}
+.btn-add{display:flex;align-items:center;gap:5px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:var(--blue);border-radius:8px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.btn-add:hover{background:rgba(56,189,248,.22);}
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:560px;}
+thead th{padding:11px 13px;text-align:left;font-size:.65rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap;}
+thead th.c{text-align:center;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.015);}
+td{padding:8px 13px;vertical-align:middle;}
+td input[type=text]{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.86rem;padding:6px 9px;outline:none;width:100%;transition:border-color .2s;}
+td input[type=text]:focus{border-color:var(--accent);}
+td input[type=number]{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'Space Mono',monospace;font-size:.86rem;padding:6px 9px;outline:none;width:72px;-moz-appearance:textfield;text-align:center;transition:border-color .2s;}
+td input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+td input[type=number]:focus{border-color:var(--accent);}
+td select{background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--text);border-radius:7px;padding:6px 9px;font-family:'Space Mono',monospace;font-size:.84rem;font-weight:700;outline:none;cursor:pointer;width:100%;}
+td select option{background:#1e1e2a;}
+td select:focus{border-color:var(--accent);}
+#emptyState td{text-align:center;padding:2.2rem 1rem;color:var(--muted);font-size:.85rem;}
+#emptyState .empty-icon{font-size:1.8rem;margin-bottom:7px;}
+#emptyState .empty-tip{font-size:.75rem;color:var(--muted);margin-top:5px;font-family:'Space Mono',monospace;}
+
+/* Contribution cell */
+.contrib-cell{text-align:center;font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;}
+.contrib-cell.filled{color:var(--accent2);}
+.contrib-cell.empty{color:var(--muted);}
+.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:4px 6px;border-radius:6px;transition:color .2s;}
+.btn-del:hover{color:var(--red);}
+
+/* Grade point override cell */
+.gp-cell input{background:rgba(124,106,245,.08);border:1px solid rgba(124,106,245,.25);border-radius:6px;color:var(--accent2);font-family:'Space Mono',monospace;font-size:.84rem;font-weight:700;padding:5px 6px;outline:none;width:54px;-moz-appearance:textfield;text-align:center;}
+.gp-cell input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.gp-cell input:focus{border-color:var(--accent);}
+
+/* Action bar */
+.action-bar{max-width:1100px;margin:1rem auto 0;padding:0 2rem;display:flex;gap:.7rem;flex-wrap:wrap;}
+.btn-calc{flex:1;min-width:140px;background:linear-gradient(135deg,var(--blue),var(--accent));color:#fff;border:none;border-radius:12px;padding:13px 22px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;}
+.btn-calc:hover{opacity:.9;}.btn-calc:active{transform:scale(.98);}
+.btn-secondary{background:var(--card);border:1px solid var(--border2);color:var(--muted2);border-radius:12px;padding:13px 18px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.btn-secondary:hover{background:var(--border2);color:var(--text);}
+
+/* Results */
+.results-section{display:none;max-width:1100px;margin:1.5rem auto 0;padding:0 2rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+/* Per-sem result cards */
+.sem-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem;margin-bottom:1.5rem;}
+.sem-result-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;}
+.src-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;}
+.src-name{font-weight:700;font-size:.9rem;}
+.src-credits{font-size:.72rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;}
+.src-sgpa{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;line-height:1;}
+.src-bar-track{background:var(--border2);border-radius:99px;height:5px;overflow:hidden;margin:.6rem 0;}
+.src-bar-fill{height:100%;border-radius:99px;}
+.src-subjects{display:flex;flex-direction:column;gap:4px;margin-top:.6rem;}
+.src-subj{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;}
+.src-subj .sn{color:var(--muted2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px;}
+.src-subj .sg{font-family:'Space Mono',monospace;font-weight:700;font-size:.72rem;}
+.src-subj .sc{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);min-width:30px;text-align:right;}
+
+/* Target CGPA calculator */
+.target-section{background:var(--card);border:1px solid rgba(56,189,248,.25);border-radius:16px;padding:1.4rem;margin-bottom:1.5rem;background-image:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(56,189,248,.05),transparent);}
+.target-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem;}
+.target-sub{font-size:.78rem;color:var(--muted2);margin-bottom:1rem;}
+.target-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;}
+.target-row label{font-size:.78rem;color:var(--muted2);font-family:'Space Mono',monospace;white-space:nowrap;}
+.target-input{background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;padding:8px 12px;outline:none;width:80px;-moz-appearance:textfield;text-align:center;transition:border-color .2s;}
+.target-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.target-input:focus{border-color:var(--blue);}
+.target-result{margin-top:1rem;padding:10px 14px;border-radius:10px;font-size:.82rem;font-weight:600;line-height:1.6;display:none;}
+.target-result.show{display:block;}
+.target-result.good{background:rgba(34,211,160,.1);color:var(--green);border:1px solid rgba(34,211,160,.2);}
+.target-result.warn{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.2);}
+.target-result.bad{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+
+/* Support */
+.support-section{max-width:1100px;margin:2.5rem auto 0;padding:0 2rem 2.5rem;}
+.support-inner{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.4rem 1.6rem;text-align:center;}
+.support-label{font-size:.72rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;}
+.support-btns{display:flex;justify-content:center;align-items:center;gap:.8rem;flex-wrap:wrap;}
+.support-btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;border-radius:10px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;transition:transform .15s,opacity .2s;white-space:nowrap;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 18px rgba(124,106,245,.35);}
+.support-btn:hover{transform:translateY(-2px);opacity:.88;}
+.support-note{font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:.9rem;}
+
+footer{max-width:1100px;margin:0 auto;padding:0 2rem 1.5rem;text-align:center;font-size:.68rem;color:#2e2e3e;font-family:'Space Mono',monospace;}
+
+@media(max-width:640px){
+  header,.hero,.scale-section,.stats-section,.cgpa-bar-wrap,.sem-bar,.sem-info,.table-section,.action-bar,.results-section,.support-section{padding-left:1rem;padding-right:1rem;}
+  .stats-section{grid-template-columns:1fr 1fr;}
+  .cgpa-big{font-size:2.2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Storage Banner -->
+<div id="storageBanner">
+  <div class="sb-text">
+    <div class="sb-title">💾 Remember your grades on this device?</div>
+    <div class="sb-desc">Your subject names, credits and grades will be saved so you don't retype them next visit.<br/>
+    <strong>Stays only on your device — never sent anywhere.</strong></div>
+  </div>
+  <div class="sb-btns">
+    <button class="sb-accept" onclick="acceptStorage()">✓ Yes, save on my device</button>
+    <button class="sb-reject" onclick="rejectStorage()">No thanks</button>
+  </div>
+</div>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🎓</div>
+    <div>
+      <div class="logo-text">Attendance<span>IQ</span></div>
+      <div class="logo-sub">CGPA Calculator</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <div class="storage-pill" id="storagePill" style="display:none" onclick="toggleStorageConsent()">
+      <div class="dot" id="storageDot"></div>
+      <span id="storageLabel">not saving</span>
+    </div>
+    <a class="nav-link" href="index.html">📊 Attendance Calculator</a>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>What's your<br/><span class="hi">CGPA right now?</span></h1>
+  <p>Enter all your semesters · get SGPA per sem + CGPA overall · plan your next semester.</p>
+</div>
+
+<!-- Grade Scale Editor -->
+<div class="scale-section">
+  <div class="scale-card">
+    <div class="scale-header">
+      <div>
+        <div class="scale-title">🎚 Your Grade Scale</div>
+        <div class="scale-sub">Pre-filled with UGC 10-point scale (used by SPPU, RTM Nagpur, DBATU &amp; most Maharashtra universities). Edit any value if your university differs.</div>
+      </div>
+      <span class="scale-badge">UGC 10-point default</span>
+    </div>
+    <div class="scale-grid" id="scaleGrid"></div>
+    <div class="scale-note">💡 Tap any grade point number to edit it · Changes apply instantly to all subjects</div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-section">
+  <div class="stat-tile t-blue"><div class="s-label">CGPA</div><div class="s-val" id="cgpaVal" style="color:var(--blue)">—</div><div class="s-sub">overall</div></div>
+  <div class="stat-tile t-purple"><div class="s-label">Current Sem SGPA</div><div class="s-val" id="curSgpa" style="color:var(--accent2)">—</div><div class="s-sub">this semester</div></div>
+  <div class="stat-tile t-green"><div class="s-label">Total Credits</div><div class="s-val" id="totalCredits" style="color:var(--green)">—</div><div class="s-sub">across all sems</div></div>
+  <div class="stat-tile t-yellow"><div class="s-label">Semesters</div><div class="s-val" id="semCount" style="color:var(--yellow)">—</div><div class="s-sub">entered</div></div>
+</div>
+
+<!-- CGPA Bar -->
+<div class="cgpa-bar-wrap">
+  <div class="cgpa-bar-card">
+    <div>
+      <div class="cgpa-big" id="cgpaBig" style="color:var(--blue)">—</div>
+      <div style="font-size:.7rem;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-top:4px">CGPA / 10</div>
+    </div>
+    <div class="cgpa-bar-inner">
+      <div class="bar-labels"><span>0</span><span>5</span><span>10</span></div>
+      <div class="bar-track">
+        <div class="bar-fill" id="cgpaBarFill" style="width:0%;background:var(--blue)"></div>
+      </div>
+    </div>
+    <div id="cgpaVerdict" class="cgpa-verdict idle">Add subjects below ↓</div>
+  </div>
+</div>
+
+<!-- Semester tabs -->
+<div class="sem-bar" id="semBar">
+  <button class="btn-add-sem" onclick="addSemester()">＋ Add Semester</button>
+</div>
+
+<!-- Semester name + SGPA pill -->
+<div class="sem-info">
+  <input type="text" class="sem-name-input" id="semNameInput" value="Semester 1" onchange="renameSem(this.value)" oninput="renameSem(this.value)"/>
+  <div class="sgpa-pill">
+    <span class="sp-label">SGPA</span>
+    <span id="semSgpaLive" style="color:var(--accent2)">—</span>
+  </div>
+  <span class="credits-pill" id="semCreditsPill">0 credits</span>
+</div>
+
+<!-- Table -->
+<div class="table-section">
+  <div class="section-header">
+    <div class="section-title">Subjects <span style="font-size:.73rem;font-weight:500;color:var(--muted2);font-family:'Space Mono',monospace;margin-left:7px" id="subCount">0 subjects</span></div>
+    <button class="btn-add" onclick="addRow()">＋ Add Subject</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px">#</th>
+          <th>Subject Name</th>
+          <th class="c">Credits</th>
+          <th class="c">Grade</th>
+          <th class="c">Grade Points</th>
+          <th class="c">Contribution</th>
+          <th style="width:28px"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr id="emptyState">
+          <td colspan="7">
+            <div class="empty-icon">📚</div>
+            <div>No subjects yet — click ＋ Add Subject</div>
+            <div class="empty-tip">Press Enter in last field to quickly add the next row</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="action-bar">
+  <button class="btn-calc" onclick="calculate()">🎓 Calculate SGPA &amp; CGPA</button>
+  <button class="btn-secondary" id="clearBtn" onclick="resetSem()">↺ Clear This Semester</button>
+</div>
+
+<!-- Results -->
+<div class="results-section" id="resultsSection">
+
+  <!-- Target CGPA planner -->
+  <div class="target-section">
+    <div class="target-title">🎯 What SGPA do I need next semester?</div>
+    <div class="target-sub">Enter your target CGPA and how many credits next semester will have — we'll tell you what SGPA you need.</div>
+    <div class="target-row">
+      <label>Target CGPA</label>
+      <input type="number" class="target-input" id="targetCgpa" placeholder="8.5" min="0" max="10" step="0.01" oninput="calcTarget()"/>
+      <label>Next sem credits</label>
+      <input type="number" class="target-input" id="targetCredits" placeholder="24" min="1" oninput="calcTarget()"/>
+    </div>
+    <div class="target-result" id="targetResult"></div>
+  </div>
+
+  <!-- Semester breakdown cards -->
+  <div style="font-size:.88rem;font-weight:700;margin-bottom:.8rem;">Semester-wise Breakdown</div>
+  <div class="sem-results-grid" id="semResultsGrid"></div>
+</div>
+
+<div class="support-section">
+  <div class="support-inner">
+    <div class="support-label">❤️ AttendanceIQ is free — support if it helped you</div>
+    <div class="support-btns">
+      <a class="support-btn" href="https://razorpay.me/@attendancecalculator" target="_blank" rel="noopener">🙏 Support AttendanceIQ — Pay any amount</a>
+    </div>
+    <div class="support-note">₹10, ₹30, ₹50 — anything works · Keeps the site ad-free · Powered by Razorpay</div>
+  </div>
+</div>
+
+<footer>AttendanceIQ · CGPA Calculator · 100% free · Data stays on your device · No tracking, no servers</footer>
+
+<script>
+// ── Default UGC 10-point grade scale ──
+const DEFAULT_SCALE = [
+  {grade:'O',  points:10},
+  {grade:'A+', points:9},
+  {grade:'A',  points:8},
+  {grade:'B+', points:7},
+  {grade:'B',  points:6},
+  {grade:'C',  points:5},
+  {grade:'D',  points:4},
+  {grade:'F',  points:0},
+];
+let gradeScale = DEFAULT_SCALE.map(g => ({...g}));
+
+function getGradePoints(grade) {
+  const g = gradeScale.find(g => g.grade === grade);
+  return g ? g.points : 0;
+}
+
+// ── Render grade scale chips ──
+function renderScale() {
+  const grid = document.getElementById('scaleGrid');
+  grid.innerHTML = '';
+  gradeScale.forEach((g, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'grade-chip';
+    chip.innerHTML = `<span class="gl">${g.grade}</span><span style="color:var(--muted);font-size:.75rem;">=</span>
+      <input type="number" class="gp" value="${g.points}" min="0" max="10" step="0.5"
+        onchange="gradeScale[${idx}].points=parseFloat(this.value)||0;liveCalc();autoSave()"
+        title="Edit grade points for ${g.grade}"/>`;
+    grid.appendChild(chip);
+  });
+}
+
+// ── Storage ──
+const CONSENT_KEY = 'aiq_cgpa_consent';
+const DATA_KEY    = 'aiq_cgpa_data';
+let storageAllowed = false;
+
+function initStorage() {
+  const c = localStorage.getItem(CONSENT_KEY);
+  if (c === 'yes') { storageAllowed = true; updateStorageUI(true); loadSaved(); }
+  else if (c === 'no') { updateStorageUI(false); }
+  else { setTimeout(() => { document.getElementById('storageBanner').style.display = 'flex'; }, 1200); }
+}
+function acceptStorage() {
+  localStorage.setItem(CONSENT_KEY, 'yes');
+  storageAllowed = true;
+  document.getElementById('storageBanner').style.display = 'none';
+  updateStorageUI(true); autoSave();
+}
+function rejectStorage() {
+  localStorage.setItem(CONSENT_KEY, 'no');
+  document.getElementById('storageBanner').style.display = 'none';
+  updateStorageUI(false);
+}
+function toggleStorageConsent() {
+  if (storageAllowed) {
+    if (confirm('Turn off saving?')) { localStorage.setItem(CONSENT_KEY,'no'); storageAllowed=false; updateStorageUI(false); }
+  } else {
+    if (confirm('Turn on saving? Grades will be remembered on this device.')) { acceptStorage(); }
+  }
+}
+function updateStorageUI(on) {
+  const pill = document.getElementById('storagePill');
+  pill.style.display = 'flex';
+  document.getElementById('storageDot').className = 'dot' + (on?' on':'');
+  document.getElementById('storageLabel').textContent = on ? 'saving' : 'not saving';
+  document.getElementById('storageLabel').style.color = on ? 'var(--green)' : 'var(--muted)';
+}
+function autoSave() {
+  if (!storageAllowed) return;
+  captureSem();
+  try { localStorage.setItem(DATA_KEY, JSON.stringify({ semesters, activeSemId, gradeScale })); } catch(e) {}
+}
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(DATA_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.gradeScale) { gradeScale = d.gradeScale; renderScale(); }
+    if (d.semesters)  { semesters = d.semesters; activeSemId = d.activeSemId || semesters[0].id; }
+    loadSemIntoTable(getActiveSem());
+    renderSemTabs();
+    liveCalc();
+  } catch(e) {}
+}
+
+// ── Semesters ──
+let semesters   = [{ id:'s1', name:'Semester 1', rows:[] }];
+let activeSemId = 's1';
+let rowId = 0;
+
+function getActiveSem() { return semesters.find(s => s.id === activeSemId); }
+
+function renderSemTabs() {
+  const bar = document.getElementById('semBar');
+  bar.querySelectorAll('.sem-tab').forEach(t => t.remove());
+  const addBtn = bar.querySelector('.btn-add-sem');
+  semesters.forEach(s => {
+    const tab = document.createElement('button');
+    tab.className = 'sem-tab' + (s.id === activeSemId ? ' active' : '');
+    tab.innerHTML = s.name + (semesters.length > 1 ? `<button class="sem-del" onclick="deleteSem('${s.id}',event)">✕</button>` : '');
+    tab.onclick = (e) => { if (!e.target.classList.contains('sem-del')) switchSem(s.id); };
+    bar.insertBefore(tab, addBtn);
+  });
+}
+function switchSem(id) {
+  captureSem();
+  activeSemId = id;
+  loadSemIntoTable(getActiveSem());
+  renderSemTabs();
+  autoSave();
+}
+function addSemester() {
+  captureSem();
+  const n = semesters.length + 1;
+  const ns = { id:'s'+Date.now(), name:'Semester '+n, rows:[] };
+  semesters.push(ns);
+  activeSemId = ns.id;
+  loadSemIntoTable(ns);
+  renderSemTabs();
+  autoSave();
+}
+function deleteSem(id, e) {
+  e.stopPropagation();
+  if (semesters.length === 1) { alert("Can't delete the only semester."); return; }
+  if (!confirm('Delete this semester?')) return;
+  semesters = semesters.filter(s => s.id !== id);
+  if (activeSemId === id) activeSemId = semesters[0].id;
+  loadSemIntoTable(getActiveSem());
+  renderSemTabs();
+  autoSave();
+}
+function renameSem(val) {
+  getActiveSem().name = val;
+  renderSemTabs();
+  autoSave();
+}
+function captureSem() {
+  const sem = getActiveSem();
+  if (!sem) return;
+  sem.rows = getRows();
+  sem.name = document.getElementById('semNameInput').value || sem.name;
+}
+function loadSemIntoTable(sem) {
+  clearTable();
+  document.getElementById('semNameInput').value = sem.name || '';
+  if (sem.rows && sem.rows.length) { sem.rows.forEach(r => addRow(r, true)); }
+  else restoreEmpty();
+  updateSubCount(); liveCalc();
+  document.getElementById('resultsSection').style.display = 'none';
+}
+
+// ── Table ──
+function clearTable() { document.getElementById('tableBody').innerHTML = ''; rowId = 0; }
+function restoreEmpty() {
+  if (document.getElementById('emptyState')) return;
+  const es = document.createElement('tr'); es.id = 'emptyState';
+  es.innerHTML = `<td colspan="7"><div class="empty-icon">📚</div><div>No subjects yet — click ＋ Add Subject</div><div class="empty-tip">Press Enter in last field to quickly add the next row</div></td>`;
+  document.getElementById('tableBody').appendChild(es);
+}
+
+function addRow(data={}, silent=false) {
+  document.getElementById('emptyState')?.remove();
+  rowId++;
+  const id = rowId;
+  const tr = document.createElement('tr'); tr.id = 'row-'+id;
+
+  // Build grade dropdown
+  const gradeOpts = gradeScale.map(g =>
+    `<option value="${g.grade}" ${(data.grade||'O')===g.grade?'selected':''}>${g.grade}</option>`
+  ).join('');
+
+  // Determine initial grade points (use saved override if present, else from scale)
+  const initGrade  = data.grade || 'O';
+  const initPoints = data.gradePoints !== undefined ? data.gradePoints : getGradePoints(initGrade);
+
+  tr.innerHTML = `
+    <td style="font-family:'Space Mono',monospace;color:var(--muted);font-size:.75rem;text-align:center">${rowId}</td>
+    <td><input type="text" placeholder="e.g. Mathematics" value="${data.name||''}" oninput="liveCalc();autoSave()"/></td>
+    <td style="text-align:center"><input type="number" placeholder="4" value="${data.credits||''}" min="1" max="6" oninput="liveCalc();autoSave()"/></td>
+    <td><select onchange="onGradeChange(this,${id})">${gradeOpts}</select></td>
+    <td class="gp-cell"><input type="number" id="gp-${id}" value="${initPoints}" min="0" max="10" step="0.5" oninput="liveCalc();autoSave()"/></td>
+    <td class="contrib-cell empty" id="contrib-${id}">—</td>
+    <td><button class="btn-del" onclick="deleteRow(${id})">✕</button></td>`;
+
+  document.getElementById('tableBody').appendChild(tr);
+  updateSubCount(); liveCalc();
+  if (!silent && !data.name) tr.querySelector('input[type=text]').focus();
+  if (!silent) autoSave();
+}
+
+function onGradeChange(sel, id) {
+  // Auto-update grade points from scale when grade changes
+  const pts = getGradePoints(sel.value);
+  const gpInput = document.getElementById('gp-'+id);
+  if (gpInput) gpInput.value = pts;
+  liveCalc(); autoSave();
+}
+
+function deleteRow(id) {
+  document.getElementById('row-'+id)?.remove();
+  if (!document.getElementById('tableBody').querySelector('tr:not(#emptyState)')) restoreEmpty();
+  updateSubCount(); liveCalc(); autoSave();
+}
+function updateSubCount() {
+  const n = document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)').length;
+  document.getElementById('subCount').textContent = n+' subject'+(n!==1?'s':'');
+}
+function getRows() {
+  return [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')].map(tr => {
+    const rid = tr.id.replace('row-','');
+    const inputs = tr.querySelectorAll('input');
+    return {
+      name:        inputs[0]?.value.trim() || '',
+      credits:     parseFloat(inputs[1]?.value) || 0,
+      grade:       tr.querySelector('select')?.value || 'O',
+      gradePoints: parseFloat(document.getElementById('gp-'+rid)?.value) || 0
+    };
+  });
+}
+
+// ── SGPA for a list of rows ──
+function calcSGPA(rows) {
+  const valid = rows.filter(r => r.credits > 0);
+  if (!valid.length) return null;
+  const totalCredits = valid.reduce((a,r) => a + r.credits, 0);
+  const totalPoints  = valid.reduce((a,r) => a + (r.credits * r.gradePoints), 0);
+  return totalPoints / totalCredits;
+}
+
+// ── CGPA across all semesters ──
+function calcCGPA() {
+  const allSems = semesters.map(s => {
+    const rows = s.id === activeSemId ? getRows() : (s.rows || []);
+    const valid = rows.filter(r => r.credits > 0);
+    const tc = valid.reduce((a,r) => a + r.credits, 0);
+    const sgpa = calcSGPA(valid);
+    return { name: s.name, rows: valid, totalCredits: tc, sgpa };
+  }).filter(s => s.sgpa !== null);
+
+  if (!allSems.length) return null;
+  const totalWeighted = allSems.reduce((a,s) => a + s.sgpa * s.totalCredits, 0);
+  const totalCredits  = allSems.reduce((a,s) => a + s.totalCredits, 0);
+  return { cgpa: totalWeighted / totalCredits, totalCredits, sems: allSems };
+}
+
+function cgpaColor(v) {
+  if (v >= 8.5) return 'var(--green)';
+  if (v >= 7)   return 'var(--blue)';
+  if (v >= 5.5) return 'var(--yellow)';
+  return 'var(--red)';
+}
+function cgpaVerdict(v) {
+  if (v >= 9)   return { cls:'great', text:'🌟 Outstanding' };
+  if (v >= 8)   return { cls:'great', text:'✅ Excellent' };
+  if (v >= 7)   return { cls:'good',  text:'👍 Good standing' };
+  if (v >= 6)   return { cls:'okay',  text:'⚠️ Average — room to improve' };
+  if (v >= 5)   return { cls:'low',   text:'⚠️ Below average' };
+  return { cls:'low', text:'🔴 Needs serious attention' };
+}
+
+function liveCalc() {
+  // Current sem live
+  const rows    = getRows();
+  const sgpa    = calcSGPA(rows.filter(r=>r.credits>0));
+  const credits = rows.filter(r=>r.credits>0).reduce((a,r)=>a+r.credits,0);
+
+  document.getElementById('semSgpaLive').textContent  = sgpa !== null ? sgpa.toFixed(2) : '—';
+  document.getElementById('semSgpaLive').style.color   = sgpa !== null ? cgpaColor(sgpa) : 'var(--accent2)';
+  document.getElementById('semCreditsPill').textContent = credits + ' credit' + (credits!==1?'s':'');
+
+  // Update contribution cells
+  [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')].forEach((tr,idx) => {
+    const r   = rows[idx]; if(!r) return;
+    const rid = tr.id.replace('row-','');
+    const cc  = document.getElementById('contrib-'+rid);
+    if (!cc) return;
+    if (r.credits > 0 && r.gradePoints >= 0) {
+      const contrib = r.credits * r.gradePoints;
+      cc.textContent = contrib.toFixed(1);
+      cc.className = 'contrib-cell filled';
+    } else {
+      cc.textContent = '—'; cc.className = 'contrib-cell empty';
+    }
+  });
+
+  // Overall CGPA
+  const result = calcCGPA();
+  if (result) {
+    const { cgpa, totalCredits, sems } = result;
+    const col = cgpaColor(cgpa);
+    const { cls, text } = cgpaVerdict(cgpa);
+    document.getElementById('cgpaVal').textContent   = cgpa.toFixed(2);
+    document.getElementById('cgpaVal').style.color   = col;
+    document.getElementById('cgpaBig').textContent   = cgpa.toFixed(2);
+    document.getElementById('cgpaBig').style.color   = col;
+    document.getElementById('cgpaBarFill').style.width    = (cgpa/10*100).toFixed(1)+'%';
+    document.getElementById('cgpaBarFill').style.background = col;
+    document.getElementById('cgpaVerdict').className  = 'cgpa-verdict '+cls;
+    document.getElementById('cgpaVerdict').textContent = text;
+    document.getElementById('totalCredits').textContent = totalCredits;
+    document.getElementById('curSgpa').textContent    = sgpa !== null ? sgpa.toFixed(2) : '—';
+    document.getElementById('curSgpa').style.color    = sgpa !== null ? cgpaColor(sgpa) : 'var(--accent2)';
+    document.getElementById('semCount').textContent   = sems.length;
+  } else {
+    ['cgpaVal','cgpaBig','totalCredits','curSgpa'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+    document.getElementById('cgpaBarFill').style.width='0%';
+    document.getElementById('cgpaVerdict').className='cgpa-verdict idle';
+    document.getElementById('cgpaVerdict').textContent='Add subjects below ↓';
+    document.getElementById('semCount').textContent='—';
+  }
+
+  calcTarget();
+}
+
+// ── Target CGPA calculator ──
+function calcTarget() {
+  const result = calcCGPA();
+  const targetEl = document.getElementById('targetResult');
+  const tCgpa    = parseFloat(document.getElementById('targetCgpa')?.value);
+  const tCreds   = parseFloat(document.getElementById('targetCredits')?.value);
+  if (!result || !tCgpa || !tCreds) { if(targetEl) targetEl.classList.remove('show'); return; }
+
+  const { cgpa, totalCredits } = result;
+  // Required: (cgpa*totalCredits + sgpa_needed*tCreds) / (totalCredits+tCreds) = tCgpa
+  const needed = (tCgpa * (totalCredits + tCreds) - cgpa * totalCredits) / tCreds;
+
+  targetEl.classList.add('show');
+  if (tCgpa > 10) {
+    targetEl.className = 'target-result show bad';
+    targetEl.textContent = '⚠ CGPA can\'t exceed 10.';
+  } else if (needed > 10) {
+    targetEl.className = 'target-result show bad';
+    targetEl.innerHTML = `❌ Not possible — even scoring a perfect 10 next semester won't get you to <strong>${tCgpa}</strong>. Max achievable: <strong>${((cgpa * totalCredits + 10 * tCreds) / (totalCredits + tCreds)).toFixed(2)}</strong>`;
+  } else if (needed <= 0) {
+    targetEl.className = 'target-result show good';
+    targetEl.innerHTML = `✅ Your CGPA is already above <strong>${tCgpa}</strong>! Even with 0 SGPA next sem you'd still be okay.`;
+  } else if (needed >= 9) {
+    targetEl.className = 'target-result show warn';
+    targetEl.innerHTML = `⚠ You need an SGPA of <strong>${needed.toFixed(2)}</strong> next semester to reach <strong>${tCgpa}</strong> CGPA. That's very high — aim for it but have a backup plan.`;
+  } else {
+    targetEl.className = 'target-result show good';
+    targetEl.innerHTML = `🎯 You need an SGPA of <strong>${needed.toFixed(2)}</strong> next semester to reach <strong>${tCgpa}</strong> CGPA.`;
+  }
+}
+
+// ── Full calculate ──
+function calculate() {
+  captureSem(); liveCalc();
+  const result = calcCGPA();
+  if (!result) { alert('Please add at least one subject with credits.'); return; }
+
+  const grid = document.getElementById('semResultsGrid');
+  grid.innerHTML = '';
+
+  result.sems.forEach(s => {
+    const sgpa  = s.sgpa;
+    const color = cgpaColor(sgpa);
+    const card  = document.createElement('div');
+    card.className = 'sem-result-card';
+    const subjRows = s.rows.map(r =>
+      `<div class="src-subj">
+        <span class="sn">${r.name||'Unnamed'}</span>
+        <span class="sg" style="color:${cgpaColor(r.gradePoints)}">${r.grade}</span>
+        <span class="sc">${r.credits}cr</span>
+      </div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="src-header">
+        <div><div class="src-name">${s.name}</div><div class="src-credits">${s.totalCredits} credits total</div></div>
+        <div class="src-sgpa" style="color:${color}">${sgpa.toFixed(2)}</div>
+      </div>
+      <div class="src-bar-track"><div class="src-bar-fill" style="width:${(sgpa/10*100).toFixed(1)}%;background:${color}"></div></div>
+      <div class="src-subjects">${subjRows}</div>`;
+    grid.appendChild(card);
+  });
+
+  const ss = document.getElementById('resultsSection');
+  ss.style.display = 'block'; ss.style.animation = 'none';
+  void ss.offsetWidth; ss.style.animation = 'fadeUp .4s ease both';
+  setTimeout(() => ss.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+}
+
+// ── Reset ──
+let clearConfirm = false;
+function resetSem() {
+  const btn = document.getElementById('clearBtn');
+  if (!clearConfirm) {
+    clearConfirm = true;
+    btn.textContent = '⚠ Tap again to confirm';
+    btn.style.color = 'var(--red)'; btn.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      clearConfirm = false; btn.textContent = '↺ Clear This Semester';
+      btn.style.color = ''; btn.style.borderColor = '';
+    }, 3000);
+    return;
+  }
+  clearConfirm = false; btn.textContent = '↺ Clear This Semester';
+  btn.style.color = ''; btn.style.borderColor = '';
+  clearTable(); restoreEmpty(); updateSubCount(); liveCalc();
+  getActiveSem().rows = [];
+  document.getElementById('resultsSection').style.display = 'none';
+  autoSave();
+}
+
+// Enter key → next row
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+    const rows = [...document.getElementById('tableBody').querySelectorAll('tr:not(#emptyState)')];
+    const last = rows[rows.length-1];
+    if (last) {
+      const inp = [...last.querySelectorAll('input')];
+      if (inp.includes(e.target) && inp.indexOf(e.target) === inp.length-1) addRow();
+    }
+  }
+});
+
+// ── Init ──
+renderScale();
+initStorage();
+if (!storageAllowed) { restoreEmpty(); updateSubCount(); liveCalc(); renderSemTabs(); }
+</script>
+</body>
+</html>
